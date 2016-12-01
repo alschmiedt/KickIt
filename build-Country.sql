@@ -1,0 +1,11 @@
+INSERT INTO Country VALUES (1,'Belgium');
+INSERT INTO Country VALUES (1729,'England');
+INSERT INTO Country VALUES (4769,'France');
+INSERT INTO Country VALUES (7809,'Germany');
+INSERT INTO Country VALUES (10257,'Italy');
+INSERT INTO Country VALUES (13274,'Netherlands');
+INSERT INTO Country VALUES (15722,'Poland');
+INSERT INTO Country VALUES (17642,'Portugal');
+INSERT INTO Country VALUES (19694,'Scotland');
+INSERT INTO Country VALUES (21518,'Spain');
+INSERT INTO Country VALUES (24558,'Switzerland');

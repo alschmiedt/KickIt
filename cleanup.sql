@@ -1,0 +1,4 @@
+DROP TABLE Matches;
+DROP TABLE Team;
+DROP TABLE League;
+DROP TABLE Country;
