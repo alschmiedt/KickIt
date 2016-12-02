@@ -1,12 +1,12 @@
 
 //     ---------------------
-import java.sql.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 // -----------------------
-
-
-import java.util.*;
-import java.io.*;
-import java.lang.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class JDBCTestMysql1 {
     
@@ -16,6 +16,19 @@ public class JDBCTestMysql1 {
 //////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////CREATE CONNECTION///////////////////////
 
+    public static String findTeamAverage(String teamName){
+    	try {
+			Statement s1 = conn.createStatement();
+	        String table = "SELECT AVG( FROM " + teamName + " ";
+	        table = table + "(LibCode INT, Title VARCHAR(50), Author VARCHAR (50),";
+	        table = table + "PRIMARY KEY (LibCode) )";
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return "";
+
+    }
+    
     public static void main(String args[]) {
 	try{
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -56,24 +69,7 @@ public class JDBCTestMysql1 {
      	  runner.runScript(new BufferedReader(new FileReader("build-Team.sql")));
      	  runner.runScript(new BufferedReader(new FileReader("build-Matches.sql")));
 
-           }  catch (Exception ee) {System.out.println(ee);}
-
-           
- try { 
-	 
-     Statement s4 = conn.createStatement();
-     /*ResultSet result = s4.executeQuery("SELECT Title, Author FROM Books");
-              boolean f = result.next(); 
-              while (f)
-                 {
-                  String s = result.getString(1);
-                  String a = result.getString(2);
-                  System.out.println(s+", "+ a);
-                  f=result.next();
-                 }*/
-     		
-            }  catch (Exception ee) {System.out.println(ee);}
-        
+           }  catch (Exception ee) {System.out.println(ee);}        
 
 
         try {
@@ -83,6 +79,5 @@ public class JDBCTestMysql1 {
         {
             System.out.println("Unable to close connection");
         };
-        
     }
 }
