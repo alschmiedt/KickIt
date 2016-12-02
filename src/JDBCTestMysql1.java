@@ -55,9 +55,6 @@ public class JDBCTestMysql1 {
                 awayScore = Integer.parseInt(awayResults.getString(2));
                 away=awayResults.next();
                }
-
-            
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,6 +62,8 @@ public class JDBCTestMysql1 {
         return (double) (homeScore + awayScore / (homeCount + awayCount));
 
     }
+    
+
     
     public static void main(String args[]) {
 	try{
