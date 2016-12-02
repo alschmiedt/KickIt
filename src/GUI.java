@@ -21,10 +21,10 @@ public class GUI {
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         panel.add(tabbedPane);
         
-        //JComponent modifyPanel = makeTextPanel("Modify");
-        //tabbedPane.addTab("Modify", null, modifyPanel, null);
+        JComponent modifyPanel = makeTextPanel("Modify");
+        tabbedPane.addTab("Modify", null, modifyPanel, null);
         
-        
+        //um
     }
 
     public static void main(String[] args) {
