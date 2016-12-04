@@ -3,9 +3,11 @@ import java.io.File;
 
 public class Queries {
 	
-	private String leagueSelect;
 	
-	public Queries() {
+	public static String getLeagueSelect()
+	{
+		String leagueSelect = "";	
+
 		try
 		{
 			Scanner file = new Scanner(new File("leagueSelect.txt"));
@@ -22,17 +24,38 @@ public class Queries {
 		{
 			System.out.println(e);
 		}
-	}
-	
-	
-	public String getLeagueSelect()
-	{
+
 		return leagueSelect;
 	}
 	
-	public String getSelectStar()
+	public static String getSelectStar()
 	{
-		return "Select * FROM ?";
+		return "Select * FROM ?;";
 	}
+	
+	public static String getAverageSelect()
+	{
+		String leagueSelect = "";	
+
+		try
+		{
+			Scanner file = new Scanner(new File("averageSelect.txt"));
+			String tmp = "";
+			
+			while (file.hasNext())
+			{
+				tmp += file.nextLine() + "\n";
+			}
+						
+			leagueSelect = tmp;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+
+		return leagueSelect;
+	}
+
 
 }
