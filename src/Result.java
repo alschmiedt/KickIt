@@ -1,6 +1,10 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Result {
 	
@@ -24,13 +28,34 @@ public class Result {
 	{
 		database.resetConnection(conn);
 	}
-	
-	public static String[] leagueSelect(int league, String season)
+    private static String [] makeStringArray( ResultSet result){
+    	ArrayList<String> stringList = new ArrayList<String>();
+		try {
+	        boolean f = result.next(); 
+	        
+	        while (f)
+           {
+        	stringList.add(result.getString(1));
+            f=result.next();
+           }
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		String[] leagueArr = new String[stringList.size()];
+		leagueArr = stringList.toArray(leagueArr);
+
+
+        return leagueArr;
+    	
+    }
+    
+    public static String[] leagueSelect(int league, String season)
 	{
 		Queries query = new Queries();
 		PreparedStatement lSelect;
 		ResultSet set;
-		String[] ret;
+		String[] ret = null;
 		
 		try
 		{
@@ -42,7 +67,7 @@ public class Result {
 			}
 			
 			set = lSelect.executeQuery();
-			
+			ret = makeStringArray(set);
 			//turn set into an array
 			
 			
@@ -52,15 +77,44 @@ public class Result {
 			System.out.println(e);
 		}
 		
-		return null;
+		return ret;
 	}
 	
+    public static String [] getLeague(){
+        String countryQuery = "SELECT Name from League;";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
+
+    public static String [] getSeason(){
+        String countryQuery = "SELECT distinct Season from Matches;";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
+
+    
 	public static String[] starSelect(String table)
 	{
 		Queries query = new Queries();
 		PreparedStatement sSelect;
 		ResultSet set;
-		String[] ret;
+		String[] ret = null;
 		
 		try
 		{
@@ -68,7 +122,7 @@ public class Result {
 			sSelect.setString(1, table);
 			
 			set = sSelect.executeQuery();
-			
+			ret = makeStringArray(set);
 			//turn set into an array
 		}
 		catch (Exception e)
@@ -76,7 +130,7 @@ public class Result {
 			System.out.println(e);
 		}
 		
-		return null;
+		return ret;
 	}
 	
 	
