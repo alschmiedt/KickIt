@@ -1,0 +1,60 @@
+SELECT Team.TeamName, League.Name, (T.HomeWins + T2.Awaywins) as tWins
+FROM Team, League, (
+SELECT TeamId, IFNULL(wins, 0) as HomeWins
+FROM Team 
+LEFT JOIN (
+SELECT HomeTeamId, count(*) as wins
+FROM Matches
+WHERE HomeScore > AwayScore 
+and Season = ?
+and LeagueId = ?
+GROUP BY HomeTeamId
+) as S 
+ON TeamId = S.HomeTeamId
+) as T, (
+SELECT TeamId, IFNULL(wins, 0) as Awaywins
+FROM Team
+LEFT JOIN (
+SELECT AwayTeamId, count(*) as wins
+FROM Matches
+WHERE AwayScore > HomeScore 
+and Season = ?
+and LeagueId = ?
+GROUP BY AwayTeamId
+) as S 
+ON TeamId = S.AwayTeamId 
+) as T2
+WHERE T.TeamId = T2.TeamId and Team.TeamId = T.TeamId and League.Id = 1
+and (T.HomeWins + T2.Awaywins) = (
+SELECT MAX(T3.tWins)
+FROM (
+SELECT (T.HomeWins + T2.Awaywins) as tWins
+FROM (
+SELECT TeamId, IFNULL(wins, 0) as HomeWins
+FROM Team 
+LEFT JOIN (
+SELECT HomeTeamId, count(*) as wins
+FROM Matches
+WHERE HomeScore > AwayScore
+and Season = ?
+and LeagueId = ?
+GROUP BY HomeTeamId
+) as S 
+ON TeamId = S.HomeTeamId
+) as T, (
+SELECT TeamId, IFNULL(wins, 0) as Awaywins
+FROM Team
+LEFT JOIN (
+SELECT AwayTeamId, count(*) as wins
+FROM Matches
+WHERE AwayScore > HomeScore
+and Season = ?
+and LeagueId = ?
+GROUP BY AwayTeamId
+) as S 
+ON TeamId = S.AwayTeamId
+) as T2
+WHERE T.TeamId = T2.TeamId
+) as T3
+)
+;
