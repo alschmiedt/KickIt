@@ -1,0 +1,6 @@
+source cleanup.sql
+source setup.sql
+source build-Country.sql
+source build-League.sql
+source build-Team.sql
+source build-Matches.sql
