@@ -80,6 +80,32 @@ public class Result {
 		return ret;
 	}
 	
+    public static String averageSelect(String team)
+	{
+		Queries query = new Queries();
+		PreparedStatement lSelect;
+		ResultSet set;
+		String[] ret = null;
+		
+		try
+		{
+			lSelect = conn.prepareStatement(query.getAverageSelect());
+			lSelect.setString(1, team);
+			set = lSelect.executeQuery();
+			ret = makeStringArray(set);
+			//turn set into an array
+			
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		
+		return ret[0];
+	}
+
+    
     public static String [] getLeague(){
         String countryQuery = "SELECT Name from League;";
 		Statement s1;
@@ -96,6 +122,20 @@ public class Result {
 
     public static String [] getSeason(){
         String countryQuery = "SELECT distinct Season from Matches;";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
+
+    public static String [] getTeam(){
+        String countryQuery = "SELECT distinct TeamName from Teams;";
 		Statement s1;
 		ResultSet result = null;
 		try {
