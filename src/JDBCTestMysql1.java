@@ -127,7 +127,7 @@ public class JDBCTestMysql1 {
      String url = "jdbc:mysql://" + propValues.getHost()+ "/alschmie?";
 
         conn = null;
-	try { 
+	 try { 
      // conn = DriverManager.getConnection(url, "LOGIN_ID", "PASSWORD");
 		conn = DriverManager.getConnection(url +"user="+propValues.getUserName()+"&password="+ propValues.getPassword());
 		getTeamNames();
@@ -153,7 +153,8 @@ public class JDBCTestMysql1 {
      	  runner.runScript(new BufferedReader(new FileReader("build-League.sql")));
      	  runner.runScript(new BufferedReader(new FileReader("build-Team.sql")));
      	  runner.runScript(new BufferedReader(new FileReader("build-Matches.sql")));
-           }  catch (Exception ee) {System.out.println(ee);}        
+       }  
+       catch (Exception ee) {System.out.println(ee);}        
 
 
         try {
