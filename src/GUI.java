@@ -166,9 +166,7 @@ public class GUI {
         		"Away Score",
         };
         
-        Object[][] data = {
-        		{5, "Hello", "US", "2008/2009", "03/1/09", "FC1", "FC2", 0, 1}
-        };
+        Object[][] data = Result.getMatches();
  
         
         JScrollPane scrollPane = new JScrollPane();

@@ -210,6 +210,40 @@ public class Result {
 		}
 	    return makeStringArray(result);    
     }
+    
+    public static String [][] getMatches(){
+        String countryQuery = "SELECT * from Matches;";
+		Statement s1;
+		ResultSet result = null;
+		String [][] stringList = null;
+		
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+
+	        boolean f = result.next(); 
+	        stringList = new String[25979][];
+	        int j = 0;
+	        while (f)
+           {
+	        String [] blah = new String[9];
+		        for(int i = 0; i < 9; i++){
+		        	blah[i] = result.getString(i+1);
+		        }
+	        stringList[j] = blah;
+	        j++;
+            f=result.next();
+           }
+	        
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	    return stringList;    
+    }
+
 
     public static String [] getTeam(){
         String countryQuery = "SELECT distinct TeamName from Team Order By TeamName;";

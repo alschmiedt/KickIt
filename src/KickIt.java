@@ -7,6 +7,7 @@ public class KickIt {
 	{
 		
 		Result.openConnection();
+		Result.getMatches();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
