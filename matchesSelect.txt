@@ -1,0 +1,7 @@
+select m.Id, l.Name, c.Name, m.Season, m.MatchDate, t.TeamName, t2.TeamName, m.HomeScore, m.AwayScore
+From Matches m, Team t, League l, Country c, Team t2
+where m.CountryId = c.Id
+      and m.LeagueId = l.Id
+      and m.HomeTeamId = t.TeamId
+      and m.AwayTeamId = t2.TeamId
+;

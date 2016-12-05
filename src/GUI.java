@@ -97,7 +97,7 @@ public class GUI {
         gbc_lblDate.gridy = 1;
         panel.add(lblDate, gbc_lblDate);
         
-        JComboBox comboTeamSearch = new JComboBox();
+        JComboBox comboTeamSearch = new JComboBox(Result.getTeam());
         GridBagConstraints gbc_comboBox = new GridBagConstraints();
         gbc_comboBox.anchor = GridBagConstraints.NORTH;
         gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
@@ -106,7 +106,7 @@ public class GUI {
         gbc_comboBox.gridy = 2;
         panel.add(comboTeamSearch, gbc_comboBox);
         
-        JComboBox comboCountrySearch = new JComboBox();
+        JComboBox comboCountrySearch = new JComboBox(Result.getCountry());
         GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
         gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
         gbc_comboBox_1.insets = new Insets(0, 0, 0, 5);
@@ -114,7 +114,7 @@ public class GUI {
         gbc_comboBox_1.gridy = 2;
         panel.add(comboCountrySearch, gbc_comboBox_1);
         
-        JComboBox comboLeagueSearch = new JComboBox();
+        JComboBox comboLeagueSearch = new JComboBox(Result.getLeague());
         GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
         gbc_comboBox_2.fill = GridBagConstraints.HORIZONTAL;
         gbc_comboBox_2.insets = new Insets(0, 0, 0, 5);
@@ -122,7 +122,7 @@ public class GUI {
         gbc_comboBox_2.gridy = 2;
         panel.add(comboLeagueSearch, gbc_comboBox_2);
         
-        JComboBox comboDateSearch = new JComboBox();
+        JComboBox comboDateSearch = new JComboBox(Result.getDates());
         GridBagConstraints gbc_comboBox_3 = new GridBagConstraints();
         gbc_comboBox_3.insets = new Insets(0, 0, 0, 5);
         gbc_comboBox_3.fill = GridBagConstraints.HORIZONTAL;
@@ -137,7 +137,7 @@ public class GUI {
         		String country = (String)comboCountrySearch.getSelectedItem();
         		String team = (String)comboTeamSearch.getSelectedItem();
         		String date = (String)comboDateSearch.getSelectedItem();
-        		
+        		Result.filterMatches(team, country, league, date);
         		//call query and get new table values
         		
         	}
@@ -311,19 +311,19 @@ public class GUI {
         lblAwayTeam.setBounds(489, 34, 102, 16);
         panel_2.add(lblAwayTeam);
         
-        JComboBox comboCountry = new JComboBox();
+        JComboBox comboCountry = new JComboBox(Result.getCountry());
         comboCountry.setBounds(6, 56, 109, 27);
         panel_2.add(comboCountry);
         
-        JComboBox comboLeague = new JComboBox();
+        JComboBox comboLeague = new JComboBox(Result.getLeague());
         comboLeague.setBounds(159, 56, 115, 27);
         panel_2.add(comboLeague);
         
-        JComboBox comboHome = new JComboBox();
+        JComboBox comboHome = new JComboBox(Result.getTeam());
         comboHome.setBounds(323, 56, 115, 27);
         panel_2.add(comboHome);
         
-        JComboBox comboAway = new JComboBox();
+        JComboBox comboAway = new JComboBox(Result.getTeam());
         comboAway.setBounds(487, 56, 125, 27);
         panel_2.add(comboAway);
         
@@ -394,7 +394,7 @@ public class GUI {
         label.setBounds(26, 230, 61, 16);
         panel_2.add(label);
         
-        JComboBox comboCountryUp = new JComboBox();
+        JComboBox comboCountryUp = new JComboBox(Result.getCountry());
         comboCountryUp.setBounds(16, 252, 109, 27);
         panel_2.add(comboCountryUp);
         
@@ -402,7 +402,7 @@ public class GUI {
         label_1.setBounds(180, 230, 61, 16);
         panel_2.add(label_1);
         
-        JComboBox comboLeagueUp = new JComboBox();
+        JComboBox comboLeagueUp = new JComboBox(Result.getLeague());
         comboLeagueUp.setBounds(169, 252, 115, 27);
         panel_2.add(comboLeagueUp);
         
@@ -410,7 +410,7 @@ public class GUI {
         label_2.setBounds(333, 230, 90, 16);
         panel_2.add(label_2);
         
-        JComboBox comboHomeUp = new JComboBox();
+        JComboBox comboHomeUp = new JComboBox(Result.getTeam());
         comboHomeUp.setBounds(333, 252, 115, 27);
         panel_2.add(comboHomeUp);
         
@@ -418,7 +418,7 @@ public class GUI {
         label_3.setBounds(499, 230, 102, 16);
         panel_2.add(label_3);
         
-        JComboBox comboAwayUp = new JComboBox();
+        JComboBox comboAwayUp = new JComboBox(Result.getTeam());
         comboAwayUp.setBounds(497, 252, 125, 27);
         panel_2.add(comboAwayUp);
         

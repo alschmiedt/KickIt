@@ -31,6 +31,7 @@ public class Result {
 	
     private static String [] makeStringArray( ResultSet result){
     	ArrayList<String> stringList = new ArrayList<String>();
+    	stringList.add(" ");
 		try {
 	        boolean f = result.next(); 
 	        
@@ -197,6 +198,36 @@ public class Result {
 	    return makeStringArray(result);    
     }
 
+    public static String [] getCountry(){
+        String countryQuery = "SELECT distinct Name from Country;";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
+    
+    public static String [] getDates(){
+        String countryQuery = "SELECT distinct MatchDate from Matches;";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
+
+
+    
     public static String [] getSeason(){
         String countryQuery = "SELECT distinct Season from Matches;";
 		Statement s1;
@@ -212,7 +243,7 @@ public class Result {
     }
     
     public static String [][] getMatches(){
-        String countryQuery = "SELECT * from Matches;";
+        String countryQuery = Queries.getAllMatches();
 		Statement s1;
 		ResultSet result = null;
 		String [][] stringList = null;
@@ -243,8 +274,7 @@ public class Result {
 		
 	    return stringList;    
     }
-
-
+    
     public static String [] getTeam(){
         String countryQuery = "SELECT distinct TeamName from Team Order By TeamName;";
 		Statement s1;
@@ -259,7 +289,35 @@ public class Result {
 	    return makeStringArray(result);    
     }
 
-	
-	
+    public static String [] filterMatches(String teamName, String countryName, String leagueName, String date){
+        String matchQuery = Queries.getAllMatches();
+        matchQuery = matchQuery.replaceAll(";", "");
+        if (!teamName.equals(" ")){
+            matchQuery = matchQuery + " and (t.TeamName = \"" + teamName + "\" OR t2.TeamName = \"" + teamName + "\")";
+        }
+        
+        if (!countryName.equals(" ")){
+            matchQuery = matchQuery + " and (c.Name = \"" + countryName + "\")";
+        }
+        
+        if (!leagueName.equals(" ")){
+            matchQuery = matchQuery + " and (l.Name = \"" + leagueName + "\")";
+        }
+        
+        if (!date.equals(" ")){
+            matchQuery = matchQuery + " and (l.Name = \"" + date + "\")";
+        }
 
+        matchQuery = matchQuery + ";";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(matchQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
 }
