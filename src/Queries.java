@@ -56,6 +56,30 @@ public class Queries {
 
 		return leagueSelect;
 	}
+	
+	public static String getPercentageSelect()
+	{
+		String leagueSelect = "";	
+		try
+		{
+			Scanner file = new Scanner(new File("percentageSelect.txt"));
+			String tmp = "";
+			
+			while (file.hasNext())
+			{
+				tmp += file.nextLine() + "\n";
+			}
+						
+			leagueSelect = tmp;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+
+		return leagueSelect;
+	}
+
 
 
 }

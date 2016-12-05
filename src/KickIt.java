@@ -7,8 +7,8 @@ public class KickIt {
 	{
 		
 		Result.openConnection();
-		
-		System.out.println(args[0]);
+		GUI.createAndShowGUI();
+		Result.percentageSelect("Carpi");
 		
 		if (args.length == 1 && args[0].equals("start"))
 		{
@@ -20,9 +20,6 @@ public class KickIt {
 		if (args.length == 1 && args[0].equals("drop"))
 		{
 			DataBaseConnection.dropDataBase();
-		}
-		
-		Result.closeConnection();
-		
+		}		
 	}
 }

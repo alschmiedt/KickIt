@@ -105,6 +105,37 @@ public class Result {
 		return ret[0];
 	}
 
+    public static String[] percentageSelect(String team)
+	{
+		Queries query = new Queries();
+		PreparedStatement lSelect;
+		ResultSet set;
+		String[] ret = new String[2];
+		
+		try
+		{
+			lSelect = conn.prepareStatement(query.getPercentageSelect());
+			lSelect.setString(1, team);
+			set = lSelect.executeQuery();
+	        boolean f = set.next(); 
+	        
+	        while (f)
+           {
+	        	ret[0] = set.getString(1);
+	        	ret[1] = set.getString(2);
+
+            f=set.next();
+           }
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		
+		return ret;
+	}
+
     
     public static String [] getLeague(){
         String countryQuery = "SELECT Name from League;";

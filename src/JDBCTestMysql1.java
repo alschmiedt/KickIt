@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class JDBCTestMysql1 {
     
@@ -18,8 +19,55 @@ public class JDBCTestMysql1 {
 ////////////////////////////////////////////CREATE CONNECTION///////////////////////
 
     
+    public static String [] makeStringArray( ResultSet result){
+    	ArrayList<String> stringList = new ArrayList<String>();
+		try {
+	        boolean f = result.next(); 
+	        
+	        while (f)
+           {
+        	stringList.add(result.getString(1));
+            f=result.next();
+           }
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return (String[]) stringList.toArray();
+    	
+    }
+    public static String [] getTeamNames(){
+        String teamQuery = "SELECT TeamName, TeamShort from Team";
+	    return makeStringArray(teamQuery);    
+    }
     
-    public static Double findTeamAverage(String teamId){
+ /*   public static String [] getLeagues(){
+        String leagueQuery = "SELECT Name from League";
+        
+	    return makeStringArray(leagueQuery);    
+    }*/
+    
+    public static String [] getLeague(){
+        String countryQuery = "SELECT Name from League";
+		Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(countryQuery);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return makeStringArray(result);    
+    }
+
+    public static String [] getMatchDate(){
+        String countryQuery = "SELECT Name from Country";
+	    return makeStringArray(countryQuery);    
+    }
+
+    
+    public static String findTeamAverage(String teamId){
 		Integer homeCount = 0;
 		Integer homeScore = 0;
 		Integer awayCount = 0;
@@ -59,7 +107,7 @@ public class JDBCTestMysql1 {
 			e.printStackTrace();
 		}
     	System.out.println(homeScore + ", " + awayScore + ", " + (homeCount) + ", " + awayCount);
-        return (double) (homeScore + awayScore / (homeCount + awayCount));
+        return Double.toString((homeScore + awayScore / (homeCount + awayCount)));
 
     }
     
@@ -74,15 +122,15 @@ public class JDBCTestMysql1 {
             System.out.println("Driver not found");
             System.out.println(ex);
         };
-
+        GetPropertyValues propValues = new GetPropertyValues();
      //String url = "jdbc:mysql://cslvm74.csc.calpoly.edu/testuser?";
-     String url = "jdbc:mysql://cslvm74.csc.calpoly.edu/alschmie?";
+     String url = "jdbc:mysql://" + propValues.getHost()+ "/alschmie?";
 
         conn = null;
 	try { 
      // conn = DriverManager.getConnection(url, "LOGIN_ID", "PASSWORD");
-		conn = DriverManager.getConnection(url +"user=alschmie&password=a_1234");
-     
+		conn = DriverManager.getConnection(url +"user="+propValues.getUserName()+"&password="+ propValues.getPassword());
+		getTeamNames();
         }
         catch (Exception ex)
         {
