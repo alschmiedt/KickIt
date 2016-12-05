@@ -51,7 +51,7 @@ public class Result {
     	
     }
     
-    //does stuff
+   
     private static int makeIntFromResult(ResultSet result)
     {
     	int ret = 0;

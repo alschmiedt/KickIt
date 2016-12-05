@@ -7,9 +7,7 @@ public class KickIt {
 	{
 		
 		Result.openConnection();
-		
-		System.out.println(args[0]);
-		
+				
 		if (args.length == 1 && args[0].equals("start"))
 		{
 			DataBaseConnection.setupDataBase();

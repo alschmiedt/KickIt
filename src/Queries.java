@@ -30,9 +30,4 @@ public class Queries {
 		return leagueSelect;
 	}
 	
-	public String getSelectStar()
-	{
-		return "Select * FROM ?";
-	}
-
 }
