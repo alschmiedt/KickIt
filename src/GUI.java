@@ -27,7 +27,8 @@ public class GUI {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-     static void createAndShowGUI() {
+    static void createAndShowGUI() {
+
         //Create and set up the window.
         JFrame frame = new JFrame("KickIt");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -255,7 +256,8 @@ public class GUI {
         panel_1.add(comboLeagueStat);
         
         JComboBox comboSeason = new JComboBox(Result.getSeason());
-        comboSeason.setBounds(215, 271, 123, 27);
+
+        comboSeason.setBounds(272, 271, 123, 27);
         panel_1.add(comboSeason);
         
         JLabel winnerOutput = new JLabel("wout");
@@ -499,7 +501,7 @@ public class GUI {
         
         frame.setVisible(true);
         
-  
+        frame.setVisible(true);
     }
 
     public static void main(String[] args) {

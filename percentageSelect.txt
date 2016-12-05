@@ -1,0 +1,28 @@
+select percentage.home, percentage.away
+from Team t,
+    (select home.HomeTeamId, homew.won/home.total as home, awayw.won/away.total as away
+    from
+        (select m.HomeTeamId, count(m.Id) as total
+        from Matches m
+        group by m.HomeTeamId) home,
+
+        (select m.HomeTeamId, count(m.Id) as won
+        from Matches m
+        where m.HomeScore > m.AwayScore
+        group by m.HomeTeamId) homew,
+
+        (select m.AwayTeamId, count(m.Id) as total
+        from Matches m
+        group by m.AwayTeamId) away,
+
+        (select m.AwayTeamId, count(m.Id) as won
+        from Matches m
+        where m.AwayScore > m.HomeScore
+        group by m.AwayTeamId) awayw
+
+    where home.HomeTeamId = homew.HomeTeamId
+          and away.AwayTeamId = awayw.AwayTeamId
+          and away.AwayTeamId = home.HomeTeamId)percentage
+where t.TeamId = percentage.HomeTeamId
+      and t.TeamName = ?
+;

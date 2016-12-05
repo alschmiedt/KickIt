@@ -7,6 +7,9 @@ public class KickIt {
 	{
 		
 		Result.openConnection();
+
+		GUI.createAndShowGUI();
+
 		
 		if (args.length == 1 && args[0].equals("start"))
 		{
@@ -22,8 +25,10 @@ public class KickIt {
 		{
 			DataBaseConnection.dropDataBase();
 		}
+
 		
 		//Result.closeConnection();
 		
+
 	}
 }
