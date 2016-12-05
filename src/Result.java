@@ -135,7 +135,7 @@ public class Result {
     }
 
     public static String [] getTeam(){
-        String countryQuery = "SELECT distinct TeamName from Teams;";
+        String countryQuery = "SELECT distinct TeamName from Team Order By TeamName;";
 		Statement s1;
 		ResultSet result = null;
 		try {

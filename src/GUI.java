@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUI {
 	private static JTable table;
@@ -13,7 +15,7 @@ public class GUI {
 	private static JTextField awayScore;
 	private static JTextField date;
 	private static JTextField season;
-	private static JTextField textField;
+	private static JTextField matchId;
 	private static JTextField tfSeasonUp;
 	private static JTextField tfDateUp;
 	private static JTextField tfAwayUp;
@@ -25,9 +27,11 @@ public class GUI {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
+     static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("KickIt");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 800);
         
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -92,40 +96,51 @@ public class GUI {
         gbc_lblDate.gridy = 1;
         panel.add(lblDate, gbc_lblDate);
         
-        JComboBox comboBox = new JComboBox();
+        JComboBox comboTeamSearch = new JComboBox();
         GridBagConstraints gbc_comboBox = new GridBagConstraints();
         gbc_comboBox.anchor = GridBagConstraints.NORTH;
         gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
         gbc_comboBox.insets = new Insets(0, 0, 0, 5);
         gbc_comboBox.gridx = 0;
         gbc_comboBox.gridy = 2;
-        panel.add(comboBox, gbc_comboBox);
+        panel.add(comboTeamSearch, gbc_comboBox);
         
-        JComboBox comboBox_1 = new JComboBox();
+        JComboBox comboCountrySearch = new JComboBox();
         GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
         gbc_comboBox_1.fill = GridBagConstraints.HORIZONTAL;
         gbc_comboBox_1.insets = new Insets(0, 0, 0, 5);
         gbc_comboBox_1.gridx = 2;
         gbc_comboBox_1.gridy = 2;
-        panel.add(comboBox_1, gbc_comboBox_1);
+        panel.add(comboCountrySearch, gbc_comboBox_1);
         
-        JComboBox comboBox_2 = new JComboBox();
+        JComboBox comboLeagueSearch = new JComboBox();
         GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
         gbc_comboBox_2.fill = GridBagConstraints.HORIZONTAL;
         gbc_comboBox_2.insets = new Insets(0, 0, 0, 5);
         gbc_comboBox_2.gridx = 4;
         gbc_comboBox_2.gridy = 2;
-        panel.add(comboBox_2, gbc_comboBox_2);
+        panel.add(comboLeagueSearch, gbc_comboBox_2);
         
-        JComboBox comboBox_3 = new JComboBox();
+        JComboBox comboDateSearch = new JComboBox();
         GridBagConstraints gbc_comboBox_3 = new GridBagConstraints();
         gbc_comboBox_3.insets = new Insets(0, 0, 0, 5);
         gbc_comboBox_3.fill = GridBagConstraints.HORIZONTAL;
         gbc_comboBox_3.gridx = 6;
         gbc_comboBox_3.gridy = 2;
-        panel.add(comboBox_3, gbc_comboBox_3);
+        panel.add(comboDateSearch, gbc_comboBox_3);
         
         JButton btnSearch = new JButton("Search");
+        btnSearch.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String league = (String)comboLeagueSearch.getSelectedItem();
+        		String country = (String)comboCountrySearch.getSelectedItem();
+        		String team = (String)comboTeamSearch.getSelectedItem();
+        		String date = (String)comboDateSearch.getSelectedItem();
+        		
+        		//call query and get new table values
+        		
+        	}
+        });
         GridBagConstraints gbc_btnSearch = new GridBagConstraints();
         gbc_btnSearch.gridx = 8;
         gbc_btnSearch.gridy = 2;
@@ -176,19 +191,42 @@ public class GUI {
         lblAveragePerTeam.setBounds(18, 22, 148, 16);
         panel_1.add(lblAveragePerTeam);
         
-        JComboBox comboavgTeam = new JComboBox();
-        comboavgTeam.setBounds(18, 42, 148, 27);
-        panel_1.add(comboavgTeam);
-        
         JLabel avgOutput = new JLabel("Output");
         avgOutput.setBounds(303, 46, 61, 16);
         panel_1.add(avgOutput);
+        
+        JComboBox comboavgTeam = new JComboBox(Result.getTeam());
+        comboavgTeam.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		JComboBox cb = (JComboBox)e.getSource();
+        		String team = (String)cb.getSelectedItem();
+        		
+        		//call query with team string
+        		avgOutput.setText(Result.averageSelect(team));
+        		//set avgOutput 
+        	}
+        });
+        comboavgTeam.setBounds(18, 42, 148, 27);
+        panel_1.add(comboavgTeam);
+        
+        
         
         JLabel lblPercentageOfGames = new JLabel("Percentage of games won at home vs away");
         lblPercentageOfGames.setBounds(18, 123, 289, 16);
         panel_1.add(lblPercentageOfGames);
         
         JComboBox comboPercentTeam = new JComboBox();
+        comboPercentTeam.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		JComboBox cb = (JComboBox)e.getSource();
+        		String team = (String)cb.getSelectedItem();
+        		
+        		//call query with team string
+        		
+        		//set homeOutput
+        		//set awayOutput
+        	}
+        });
         comboPercentTeam.setBounds(18, 151, 148, 27);
         panel_1.add(comboPercentTeam);
         
@@ -212,17 +250,32 @@ public class GUI {
         lblLeagueWinner.setBounds(18, 248, 235, 16);
         panel_1.add(lblLeagueWinner);
         
-        JComboBox comboLeagueStat = new JComboBox();
+        JComboBox comboLeagueStat = new JComboBox(Result.getLeague());
         comboLeagueStat.setBounds(18, 271, 148, 27);
         panel_1.add(comboLeagueStat);
         
-        JComboBox comboSeason = new JComboBox();
-        comboSeason.setBounds(272, 271, 123, 27);
+        JComboBox comboSeason = new JComboBox(Result.getSeason());
+        comboSeason.setBounds(215, 271, 123, 27);
         panel_1.add(comboSeason);
         
         JLabel winnerOutput = new JLabel("wout");
-        winnerOutput.setBounds(485, 275, 61, 16);
+        winnerOutput.setBounds(560, 275, 61, 16);
         panel_1.add(winnerOutput);
+        
+        JButton btnGetInfo = new JButton("get info");
+        btnGetInfo.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String league = (String)comboLeagueStat.getSelectedItem();
+        		String season = (String)comboSeason.getSelectedItem();
+        		
+        		//call query with league and season
+        		
+        		//set winnerOutput
+        	}
+        });
+        btnGetInfo.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        btnGetInfo.setBounds(408, 270, 85, 29);
+        panel_1.add(btnGetInfo);
         
         JPanel modifyPanel = new JPanel();
         tabbedPane.addTab("Modify", null, modifyPanel, null);
@@ -314,12 +367,20 @@ public class GUI {
         lblMatchId.setBounds(16, 202, 61, 16);
         panel_2.add(lblMatchId);
         
-        textField = new JTextField();
-        textField.setBounds(97, 196, 75, 28);
-        panel_2.add(textField);
-        textField.setColumns(10);
+        matchId = new JTextField();
+        matchId.setBounds(97, 196, 75, 28);
+        panel_2.add(matchId);
+        matchId.setColumns(10);
         
         JButton btnGetMatch = new JButton("get match");
+        btnGetMatch.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String match = matchId.getText();
+        		
+        		//get match values back
+        		
+        	}
+        });
         btnGetMatch.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
         btnGetMatch.setBounds(205, 197, 90, 29);
         panel_2.add(btnGetMatch);
@@ -411,6 +472,32 @@ public class GUI {
         btnDelete.setBounds(205, 385, 90, 29);
         panel_2.add(btnDelete);
         
+        JButton btnUpdate = new JButton("update");
+        btnUpdate.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        btnUpdate.setBounds(643, 321, 90, 29);
+        panel_2.add(btnUpdate);
+        
+        JButton btnInsert = new JButton("insert");
+        btnInsert.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String league = (String)comboLeague.getSelectedItem();
+        		String country = (String)comboCountry.getSelectedItem();
+        		String homeTeam = (String)comboHome.getSelectedItem();
+        		String awayTeam = (String)comboHome.getSelectedItem();
+        		String seasonStr = season.getText();
+        		String homeScoreStr = homeScore.getText();
+        		String awayScoreStr = awayScore.getText();
+        		String dateStr = date.getText();
+        		
+        		//call insert with strings
+        		
+        	}
+        });
+        btnInsert.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        btnInsert.setBounds(643, 125, 90, 29);
+        panel_2.add(btnInsert);
+        
+        frame.setVisible(true);
         
   
     }

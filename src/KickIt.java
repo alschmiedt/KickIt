@@ -8,12 +8,13 @@ public class KickIt {
 		
 		Result.openConnection();
 		
-		System.out.println(args[0]);
-		
 		if (args.length == 1 && args[0].equals("start"))
 		{
 			DataBaseConnection.setupDataBase();
+			
+			
 		}
+		GUI.createAndShowGUI();
 		
 		Result.leagueSelect(1, "2012/2013");
 		
@@ -22,7 +23,7 @@ public class KickIt {
 			DataBaseConnection.dropDataBase();
 		}
 		
-		Result.closeConnection();
+		//Result.closeConnection();
 		
 	}
 }
