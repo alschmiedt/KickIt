@@ -36,10 +36,10 @@ public class JDBCTestMysql1 {
         return (String[]) stringList.toArray();
     	
     }
-    public static String [] getTeamNames(){
+   /* public static String [] getTeamNames(){
         String teamQuery = "SELECT TeamName, TeamShort from Team";
 	    return makeStringArray(teamQuery);    
-    }
+    }*/
     
  /*   public static String [] getLeagues(){
         String leagueQuery = "SELECT Name from League";
@@ -61,10 +61,10 @@ public class JDBCTestMysql1 {
 	    return makeStringArray(result);    
     }
 
-    public static String [] getMatchDate(){
+    /*public static String [] getMatchDate(){
         String countryQuery = "SELECT Name from Country";
 	    return makeStringArray(countryQuery);    
-    }
+    }*/
 
     
     public static String findTeamAverage(String teamId){
@@ -130,7 +130,6 @@ public class JDBCTestMysql1 {
 	 try { 
      // conn = DriverManager.getConnection(url, "LOGIN_ID", "PASSWORD");
 		conn = DriverManager.getConnection(url +"user="+propValues.getUserName()+"&password="+ propValues.getPassword());
-		getTeamNames();
         }
         catch (Exception ex)
         {

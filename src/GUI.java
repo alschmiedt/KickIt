@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -130,6 +132,8 @@ public class GUI {
         gbc_comboBox_3.gridy = 2;
         panel.add(comboDateSearch, gbc_comboBox_3);
         
+        
+        
         JButton btnSearch = new JButton("Search");
         btnSearch.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -137,9 +141,22 @@ public class GUI {
         		String country = (String)comboCountrySearch.getSelectedItem();
         		String team = (String)comboTeamSearch.getSelectedItem();
         		String date = (String)comboDateSearch.getSelectedItem();
-        		Result.filterMatches(team, country, league, date);
-        		//call query and get new table values
-        		
+        		String [][] newData = Result.filterMatches(team, country, league, date);
+        		String[] cols = {
+	        		"MatchID",
+	        		"League",
+	        		"Country",
+	        		"Season",
+	        		"Match Date",
+	        		"Home Team",
+	        		"Away Team",
+	        		"Home Score",
+	        		"Away Score",
+        		};
+
+				//call query and get new table values
+        		DefaultTableModel dataModel = new DefaultTableModel(newData, cols);
+        		table.setModel(dataModel);
         	}
         });
         GridBagConstraints gbc_btnSearch = new GridBagConstraints();

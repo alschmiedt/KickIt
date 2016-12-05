@@ -289,9 +289,13 @@ public class Result {
 	    return makeStringArray(result);    
     }
 
-    public static String [] filterMatches(String teamName, String countryName, String leagueName, String date){
+    public static String [][] filterMatches(String teamName, String countryName, String leagueName, String date){
         String matchQuery = Queries.getAllMatches();
         matchQuery = matchQuery.replaceAll(";", "");
+		String [][] stringList = null;
+		Statement s1;
+		ResultSet result = null;
+
         if (!teamName.equals(" ")){
             matchQuery = matchQuery + " and (t.TeamName = \"" + teamName + "\" OR t2.TeamName = \"" + teamName + "\")";
         }
@@ -305,19 +309,32 @@ public class Result {
         }
         
         if (!date.equals(" ")){
-            matchQuery = matchQuery + " and (l.Name = \"" + date + "\")";
+            matchQuery = matchQuery + " and (m.MatchDate = \"" + date + "\")";
         }
 
         matchQuery = matchQuery + ";";
-		Statement s1;
-		ResultSet result = null;
 		try {
 			s1 = conn.createStatement();
 	        result = s1.executeQuery(matchQuery);
+
+	        boolean f = result.next(); 
+	        stringList = new String[25979][];
+	        int j = 0;
+	        while (f)
+           {
+	        String [] blah = new String[9];
+		        for(int i = 0; i < 9; i++){
+		        	blah[i] = result.getString(i+1);
+		        }
+	        stringList[j] = blah;
+	        j++;
+            f=result.next();
+           }
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    return makeStringArray(result);    
+	    return stringList;    
     }
 }
