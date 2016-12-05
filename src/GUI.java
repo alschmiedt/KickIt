@@ -216,21 +216,6 @@ public class GUI {
         lblPercentageOfGames.setBounds(18, 123, 289, 16);
         panel_1.add(lblPercentageOfGames);
         
-        JComboBox comboPercentTeam = new JComboBox();
-        comboPercentTeam.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		JComboBox cb = (JComboBox)e.getSource();
-        		String team = (String)cb.getSelectedItem();
-        		
-        		//call query with team string
-        		
-        		//set homeOutput
-        		//set awayOutput
-        	}
-        });
-        comboPercentTeam.setBounds(18, 151, 148, 27);
-        panel_1.add(comboPercentTeam);
-        
         JLabel lblHome = new JLabel("Home");
         lblHome.setBounds(303, 155, 61, 16);
         panel_1.add(lblHome);
@@ -246,6 +231,25 @@ public class GUI {
         JLabel awayOutput = new JLabel("aout");
         awayOutput.setBounds(408, 138, 61, 16);
         panel_1.add(awayOutput);
+        
+        JComboBox comboPercentTeam = new JComboBox(Result.getTeam());
+        comboPercentTeam.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		JComboBox cb = (JComboBox)e.getSource();
+        		String team = (String)cb.getSelectedItem();
+        		
+        		//call query with team string
+        		String[] percents = Result.percentageSelect(team);
+        		//set homeOutput
+        		homeOutput.setText(percents[0]);
+        		//set awayOutput
+        		awayOutput.setText(percents[1]);
+        	}
+        });
+        comboPercentTeam.setBounds(18, 151, 148, 27);
+        panel_1.add(comboPercentTeam);
+        
+        
         
         JLabel lblLeagueWinner = new JLabel("League Winner For Season");
         lblLeagueWinner.setBounds(18, 248, 235, 16);
@@ -498,6 +502,15 @@ public class GUI {
         btnInsert.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
         btnInsert.setBounds(643, 125, 90, 29);
         panel_2.add(btnInsert);
+        
+        JButton btnCloseConn = new JButton("close conn");
+        btnCloseConn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Result.closeConnection();
+        	}
+        });
+        btnCloseConn.setBounds(6, 496, 117, 29);
+        panel_2.add(btnCloseConn);
         
         frame.setVisible(true);
         
