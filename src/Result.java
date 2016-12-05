@@ -28,6 +28,7 @@ public class Result {
 	{
 		database.resetConnection(conn);
 	}
+	
     private static String [] makeStringArray( ResultSet result){
     	ArrayList<String> stringList = new ArrayList<String>();
 		try {
@@ -50,6 +51,29 @@ public class Result {
     	
     }
     
+    private static int makeIntFromResult(ResultSet result)
+    {
+    	int ret = 0;
+    	try
+    	{
+    		boolean f = result.next();
+    		
+    		while (f)
+    		{
+    			ret = Integer.parseInt(result.getString(1));
+    			f = result.next();
+    		}
+    		
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(e);
+    	}
+    	
+    	return ret;
+    }
+    
+    
     public static String[] leagueSelect(int league, String season)
 	{
 		Queries query = new Queries();
@@ -62,14 +86,14 @@ public class Result {
 			lSelect = conn.prepareStatement(query.getLeagueSelect());
 			for (int i = 1; i < 9; i++)
 			{
-				lSelect.setInt(i++, league);
-				lSelect.setString(i, season);
+				lSelect.setString(i++, season);
+				lSelect.setInt(i, league);
 			}
 			
 			set = lSelect.executeQuery();
 			ret = makeStringArray(set);
-			//turn set into an array
-			
+			for (String s : ret)
+				System.out.println(s);			
 			
 		}
 		catch (Exception e)
@@ -79,6 +103,27 @@ public class Result {
 		
 		return ret;
 	}
+    
+    public static int leagueNameToId(String league)
+    {
+    	PreparedStatement select;
+    	String query = "SELECT Id FROM League WHERE Name = ?";
+    	ResultSet set = null;
+    	
+    	try
+    	{
+    		select = conn.prepareStatement(query);
+    		select.setString(1, league);
+    		
+    		set = select.executeQuery();
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(e);
+    	}
+    	
+    	return makeIntFromResult(set);
+    }
 	
     public static String [] getLeague(){
         String countryQuery = "SELECT Name from League;";
@@ -107,31 +152,6 @@ public class Result {
 		}
 	    return makeStringArray(result);    
     }
-
-    
-	public static String[] starSelect(String table)
-	{
-		Queries query = new Queries();
-		PreparedStatement sSelect;
-		ResultSet set;
-		String[] ret = null;
-		
-		try
-		{
-			sSelect = conn.prepareStatement(query.getSelectStar());
-			sSelect.setString(1, table);
-			
-			set = sSelect.executeQuery();
-			ret = makeStringArray(set);
-			//turn set into an array
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-		
-		return ret;
-	}
 	
 	
 
