@@ -265,7 +265,7 @@ public class GUI {
         panel_1.add(comboSeason);
         
         JLabel winnerOutput = new JLabel("wout");
-        winnerOutput.setBounds(560, 275, 61, 16);
+        winnerOutput.setBounds(560, 275, 213, 16);
         panel_1.add(winnerOutput);
         
         JButton btnGetInfo = new JButton("get info");
@@ -275,8 +275,9 @@ public class GUI {
         		String season = (String)comboSeason.getSelectedItem();
         		
         		//call query with league and season
-        		
+        		String[] result = Result.leagueSelect(Result.leagueNameToId(league), season);
         		//set winnerOutput
+        		winnerOutput.setText(result[0]);
         	}
         });
         btnGetInfo.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
