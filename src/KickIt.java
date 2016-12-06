@@ -5,8 +5,9 @@ public class KickIt {
 	
 	public static void main(String[] args)
 	{
-		
 		Result.openConnection();
+		Result.updateMatches(1, "France", "England Premier League", "", "", "Oud-Heverlee Leuven,O-H", "", -1, -1);
+		
 		Result.getMatches();
 		try {
 			Thread.sleep(1000);
@@ -30,8 +31,7 @@ public class KickIt {
 			DataBaseConnection.dropDataBase();
 		}
 
-		
-		//Result.closeConnection();
+		Result.closeConnection();
 		
 
 	}
