@@ -352,20 +352,26 @@ public class Result {
     			+ "and m.HomeTeamId = t.TeamId "
     			+ "and m.AwayTeamId = t2.TeamId "; 
     	String[] resultStr = new String[9];
-    	
-    	
-    	if (isInt(matchId) && Integer.parseInt(matchId) > 0 && Integer.parseInt(matchId) < 25980)
-    		matchQuery += "and m.Id = " + matchId + ";";
-    	else
-    	{
-    		resultStr[0] = "Invalid Match Id";
-    		return resultStr;
-    	}
-    		
-    	
+    	PreparedStatement p1;
     	Statement s1;
-		ResultSet result = null;
-		try {
+    	ResultSet result;
+    	int check;
+    	
+    	try
+    	{
+	    	p1 = conn.prepareStatement("SELECT Id FROM Matches WHERE Id = ?;");
+	    	p1.setString(1, matchId);
+	    	result = p1.executeQuery();
+			check = makeIntFromResult(result);
+	    	
+	    	if (isInt(matchId) && check != -1)
+	    		matchQuery += "and m.Id = " + matchId + ";";
+	    	else
+	    	{
+	    		resultStr[0] = "Invalid Match Id";
+	    		return resultStr;
+	    	}
+    		
 			s1 = conn.createStatement();
 	        result = s1.executeQuery(matchQuery);
 	        result.next();
@@ -428,10 +434,12 @@ public class Result {
         matchQuery = matchQuery + ";";
 		try {
 			s1 = conn.createStatement();
+			result = s1.executeQuery("SELECT count(*) FROM Matches;");
+			int size = makeIntFromResult(result);
 	        result = s1.executeQuery(matchQuery);
 
 	        boolean f = result.next(); 
-	        stringList = new String[25979][];
+	        stringList = new String[size][];
 	        int j = 0;
 	        while (f)
            {
@@ -462,83 +470,90 @@ public class Result {
     	String updateBack = " WHERE Id = ";
     	String updateComplete;
     	String setClause = "";
-    	Statement update;
+    	PreparedStatement update;
+    	ResultSet result;
+    	int check;
     	int temp;
-    	
-    	if (isInt(id) && Integer.parseInt(id) > 0 && Integer.parseInt(id) < 25980)
-    		updateBack += id + ";";
-    	else
-    		return "Invalid Match Id";
-    	
-    	
-    	if (!country.equals("")) {
-    		temp = idForLeauge_Country("Country", country);
-    		if (temp != -1)
-    			setClause += ", CountryId = " + Integer.toString(temp);
-    		else
-    			return "Invalid Country Name";
-    	}
-    	
-    	if (!league.equals("")) {
-    		temp = idForLeauge_Country("League", league);
-    		if (temp != -1)
-    			setClause += ", LeagueId = " + Integer.toString(temp);
-    		else
-    			return "Invalid League Name";
-    	}
-    	
-    	if (!season.equals("")) {
-    		if (season.matches("([0-9]{4}/[0-9]{4})"))
-    				setClause += ", Season = \"" + season + "\"";
-    		else
-    			return "Invalid Season";
-    	}
-    	
-    	if (!date.equals("")) {
-    		if (date.matches("([0-9]{4}-[0-9]{2}-[0-9]{2})"))
-    			setClause += ", MatchDate = \"" + date + "\"";
-    		else
-    			return "Invalid Date";
-    	}
-    	
-    	if (!home.equals("")) {
-    		temp = teamIdFromName(home);
-    		if (temp != -1)
-    			setClause += ", HomeTeamId = " + Integer.toString(temp);
-    		else
-    			return "Invalid Team Name";
-    	}
-    	
-    	if (!away.equals("")) {
-    		temp = teamIdFromName(away);
-    		if (temp != -1)
-    			setClause += ", AwayTeamId = " + Integer.toString(temp);
-    		else
-    			return "Invalid Team Name";
-    	}
-    	
-    	if (!hscore.equals("")) {
-    		if (isInt(hscore))
-    			setClause += ", HomeScore = " + hscore;
-    		else
-    			return "Invalid Score";
-    	}
-    	
-    	if (!ascore.equals("")) {
-    		if (isInt(ascore))
-    			setClause += ", AwayScore = " + ascore;
-    		else
-    			return "Invalid Score";
-    	}
-    	
-    	updateComplete = updateFront + setClause.substring(1) + updateBack;
-    	System.out.println(updateComplete);
-
     	
     	try
     	{
-    		update = conn.createStatement();
-    		update.executeUpdate(updateComplete);
+    		update = conn.prepareStatement("SELECT Id FROM Matches WHERE Id = ?;");
+    		update.setString(1, id);
+    		result = update.executeQuery();
+			check = makeIntFromResult(result);
+    	
+    	
+	    	if (isInt(id) && check != -1)
+	    		updateBack += id + ";";
+	    	else
+	    		return "Invalid Match Id";
+	    	
+	    	
+	    	if (!country.equals("")) {
+	    		temp = idForLeauge_Country("Country", country);
+	    		if (temp != -1)
+	    			setClause += ", CountryId = " + Integer.toString(temp);
+	    		else
+	    			return "Invalid Country Name";
+	    	}
+	    	
+	    	if (!league.equals("")) {
+	    		temp = idForLeauge_Country("League", league);
+	    		if (temp != -1)
+	    			setClause += ", LeagueId = " + Integer.toString(temp);
+	    		else
+	    			return "Invalid League Name";
+	    	}
+    	
+	    	if (!season.equals("")) {
+	    		if (season.matches("([0-9]{4}/[0-9]{4})"))
+	    				setClause += ", Season = \"" + season + "\"";
+	    		else
+	    			return "Invalid Season";
+	    	}
+	    	
+	    	if (!date.equals("")) {
+	    		if (date.matches("([0-9]{4}-[0-9]{2}-[0-9]{2})"))
+	    			setClause += ", MatchDate = \"" + date + "\"";
+	    		else
+	    			return "Invalid Date";
+	    	}
+	    	
+	    	if (!home.equals("")) {
+	    		temp = teamIdFromName(home);
+	    		if (temp != -1)
+	    			setClause += ", HomeTeamId = " + Integer.toString(temp);
+	    		else
+	    			return "Invalid Team Name";
+	    	}
+	    	
+	    	if (!away.equals("")) {
+	    		temp = teamIdFromName(away);
+	    		if (temp != -1)
+	    			setClause += ", AwayTeamId = " + Integer.toString(temp);
+	    		else
+	    			return "Invalid Team Name";
+	    	}
+    	
+	    	if (!hscore.equals("")) {
+	    		if (isInt(hscore))
+	    			setClause += ", HomeScore = " + hscore;
+	    		else
+	    			return "Invalid Score";
+	    	}
+	    	
+	    	if (!ascore.equals("")) {
+	    		if (isInt(ascore))
+	    			setClause += ", AwayScore = " + ascore;
+	    		else
+	    			return "Invalid Score";
+	    	}
+	    	
+	    	updateComplete = updateFront + setClause.substring(1) + updateBack;
+	    	System.out.println(updateComplete);
+
+    	
+       		update.executeUpdate(updateComplete);
     	}
     	catch (Exception e)
     	{
@@ -622,17 +637,24 @@ public class Result {
     
     public static String deleteFromMatches(String id)
     {
-    	Statement delete;
+    	PreparedStatement delete;
     	String deleteStatement = "DELETE FROM Matches WHERE Id = ";
-    	
-    	if (isInt(id) && Integer.parseInt(id) > 0 && Integer.parseInt(id) < 25980)
-    		deleteStatement += id + ";";
-    	else
-    		return "Invalid Match Id";
+    	ResultSet result;
+    	int check;
     	
     	try
     	{
-    		delete = conn.createStatement();
+    		delete = conn.prepareStatement("SELECT Id FROM Matches WHERE Id = ?");
+    		delete.setString(1, id);
+    		result = delete.executeQuery();
+			check = makeIntFromResult(result);
+			System.out.println(check);
+			
+			if (isInt(id) && check != -1)
+	    		deleteStatement += id + ";";
+	    	else
+	    		return "Invalid Match Id";
+			
     		delete.executeUpdate(deleteStatement);
     	}
     	catch (Exception e)
