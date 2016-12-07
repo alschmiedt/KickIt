@@ -157,12 +157,17 @@ public class Result {
     	
     	try
     	{
-    		select = conn.prepareStatement(query);
-
-    		select.setString(1, name.split(",")[0]);
-    		select.setString(2, name.split(",")[1].trim());
+    		if (name.split(",").length == 2) {
+	    		select = conn.prepareStatement(query);
+	
+	    		select.setString(1, name.split(",")[0]);
+	    		select.setString(2, name.split(",")[1].trim());
+	    		
+	    		set = select.executeQuery();
+    		}
+    		else
+    			return -1;
     		
-    		set = select.executeQuery();
     	}
     	catch (Exception e)
     	{
@@ -292,13 +297,17 @@ public class Result {
 		Statement s1;
 		ResultSet result = null;
 		String [][] stringList = null;
+		int size = 0;
 		
 		try {
+			
 			s1 = conn.createStatement();
+			result = s1.executeQuery("SELECT count(*) FROM Matches;");
+			size = makeIntFromResult(result);
 	        result = s1.executeQuery(countryQuery);
 
 	        boolean f = result.next(); 
-	        stringList = new String[25979][];
+	        stringList = new String[size][];
 	        int j = 0;
 	        while (f)
            {
@@ -387,6 +396,7 @@ public class Result {
     {
     	return i.matches("([0-9]+)");
     }
+    
     public static String updateMatches(String id, String country, String league, String season, String date, String home, String away, String hscore, String ascore)
     {
     	String updateFront = "UPDATE Matches SET";
@@ -465,7 +475,7 @@ public class Result {
     	updateComplete = updateFront + setClause.substring(1) + updateBack;
     	System.out.println(updateComplete);
 
-/*    	
+    	
     	try
     	{
     		update = conn.createStatement();
@@ -475,8 +485,106 @@ public class Result {
     	{
     		System.out.println(e);
     	}
-*/
+
     	return "OK";
     }
     
+    public static String insertMatch(String country, String league, String season, String date, String home, String away, String hscore, String ascore)
+    {
+    	String insertFront = "INSERT INTO Matches (CountryId, LeagueId, Season, MatchDate, HomeTeamId, AwayTeamId, HomeScore, AwayScore) VALUES (";
+    	String insertBack = ")";
+    	String insertComplete;
+    	String valueClause = "";
+    	Statement insert;
+    	int temp;
+    	
+		temp = idForLeauge_Country("Country", country);
+		if (temp != -1)
+			valueClause += ", " + Integer.toString(temp);
+		else
+			return "Invalid Country Name";
+    	
+		temp = idForLeauge_Country("League", league);
+		if (temp != -1)
+			valueClause += ", " + Integer.toString(temp);
+		else
+			return "Invalid League Name";
+    	
+		if (season.matches("([0-9]{4}/[0-9]{4})"))
+			valueClause += ", \"" + season + "\"";
+		else
+			return "Invalid Season";
+    	
+		if (date.matches("([0-9]{4}-[0-9]{2}-[0-9]{2})"))
+			valueClause += ", \"" + date + "\"";
+		else
+			return "Invalid Date";
+    	
+		temp = teamIdFromName(home);
+		if (temp != -1)
+			valueClause += ", " + Integer.toString(temp);
+		else
+			return "Invalid Team Name";
+    	
+    	
+		temp = teamIdFromName(away);
+		if (temp != -1)
+			valueClause += ", " + Integer.toString(temp);
+		else
+			return "Invalid Team Name";
+    	
+		if (isInt(hscore))
+			valueClause += ", " + hscore;
+		else
+			return "Invalid Score";
+    	
+    	
+		if (isInt(ascore))
+			valueClause += ", " + ascore;
+		else
+			return "Invalid Score";
+    	
+    	
+    	insertComplete = insertFront + valueClause.substring(1) + insertBack;
+    	System.out.println(insertComplete);
+ 	
+    	try
+    	{
+    		insert = conn.createStatement();
+    		insert.executeUpdate(insertComplete);
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(e);
+    	}
+    	
+    	return "OK";
+    }
+    
+    public static String deleteFromMatches(String id)
+    {
+    	Statement delete;
+    	String deleteStatement = "DELETE FROM Matches WHERE Id = ";
+    	
+    	if (isInt(id) && Integer.parseInt(id) > 0 && Integer.parseInt(id) < 25980)
+    		deleteStatement += id + ";";
+    	else
+    		return "Invalid Match Id";
+    	
+    	try
+    	{
+    		delete = conn.createStatement();
+    		delete.executeUpdate(deleteStatement);
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(e);
+    	}
+    	
+    	return "OK";
+    	
+    	
+    	
+    	
+    }
 }

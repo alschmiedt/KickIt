@@ -17,7 +17,7 @@ CREATE TABLE Team(
 );
 
 CREATE TABLE Matches(
-   Id int PRIMARY KEY, 
+   Id int PRIMARY KEY AUTO_INCREMENT, 
    CountryId int, 
    LeagueId int, 
    Season char(16), 
