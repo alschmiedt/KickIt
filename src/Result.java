@@ -330,12 +330,12 @@ public class Result {
     }
     
     public static String [] getTeam(){
-        String countryQuery = "SELECT distinct TeamName from Team Order By TeamName;";
+        String teamQuery = "select concat(TeamName, \",\",TeamShort) from Team;";
 		Statement s1;
 		ResultSet result = null;
 		try {
 			s1 = conn.createStatement();
-	        result = s1.executeQuery(countryQuery);
+	        result = s1.executeQuery(teamQuery);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -381,6 +381,19 @@ public class Result {
        
 	    return resultStr;
     }
+    
+    public static String getName(String teamName)
+    {
+    	String name = teamName.split(",")[0];
+    	
+    	return  "\"" + name +"\"";
+    }
+    public static String getShort(String teamName)
+    {
+    	String name = teamName.split(",")[1];
+    	
+    	return  "\"" + name +"\"";
+    }
 
     public static String [][] filterMatches(String teamName, String countryName, String leagueName, String date){
         String matchQuery = Queries.getAllMatches();
@@ -396,7 +409,8 @@ public class Result {
 		ResultSet result = null;
 
         if (!teamName.equals(" ")){
-            matchQuery = matchQuery + " and (t.TeamName = \"" + teamName + "\" OR t2.TeamName = \"" + teamName + "\")";
+        	
+            matchQuery = matchQuery + " and ((t.TeamName =" +getName(teamName)+ "and t.TeamShort ="+ getShort(teamName)+") or (t2.TeamName ="+ getName(teamName)+ "and t2.TeamShort ="+ getShort(teamName)+"))";
         }
         
         if (!countryName.equals(" ")){

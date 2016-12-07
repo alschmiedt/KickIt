@@ -30,10 +30,7 @@ public class KickIt {
 		if (args.length == 1 && args[0].equals("drop"))
 		{
 			DataBaseConnection.dropDataBase();
-		}
-
-		Result.closeConnection();
-		
+		}		
 
 	}
 }
