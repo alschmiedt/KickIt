@@ -342,10 +342,55 @@ public class Result {
 		}
 	    return makeStringArray(result);    
     }
+    
+    public static String[] getMatchInfo(String matchId)
+    {
+    	String matchQuery = "select l.Name, c.Name, m.Season, m.MatchDate, t.TeamName, t2.TeamName, m.HomeScore, m.AwayScore "
+    			+ "From Matches m, Team t, League l, Country c, Team t2 "
+    			+ "where m.CountryId = c.Id "
+    			+ "and m.LeagueId = l.Id "
+    			+ "and m.HomeTeamId = t.TeamId "
+    			+ "and m.AwayTeamId = t2.TeamId "; 
+    	String[] resultStr = new String[9];
+    	
+    	
+    	if (isInt(matchId) && Integer.parseInt(matchId) > 0 && Integer.parseInt(matchId) < 25980)
+    		matchQuery += "and m.Id = " + matchId + ";";
+    	else
+    	{
+    		resultStr[0] = "Invalid Match Id";
+    		return resultStr;
+    	}
+    		
+    	
+    	Statement s1;
+		ResultSet result = null;
+		try {
+			s1 = conn.createStatement();
+	        result = s1.executeQuery(matchQuery);
+	        result.next();
+	        resultStr = new String[8];
+	        for(int i = 0; i < 8; i++){
+	        	resultStr[i] = result.getString(i+1);
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+       
+	    return resultStr;
+    }
 
     public static String [][] filterMatches(String teamName, String countryName, String leagueName, String date){
         String matchQuery = Queries.getAllMatches();
-        matchQuery = matchQuery.replaceAll(";", "");
+        //matchQuery = matchQuery.replaceAll(";", "");
+        matchQuery = "select m.Id, l.Name, c.Name, m.Season, m.MatchDate, t.TeamName, t2.TeamName, m.HomeScore, m.AwayScore " +
+        "From Matches m, Team t, League l, Country c, Team t2 "
+        + "WHERE m.CountryId = c.Id "
+        + "and m.LeagueId = l.Id "
+        + "and m.HomeTeamId = t.TeamId "
+        + "and m.AwayTeamId = t2.TeamId";
 		String [][] stringList = null;
 		Statement s1;
 		ResultSet result = null;

@@ -184,7 +184,7 @@ public class GUI {
         };
         
         Object[][] data = Result.getMatches();
- 
+        DefaultTableModel dataModel = new DefaultTableModel(data, cols);
         
         JScrollPane scrollPane = new JScrollPane();
         GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -192,8 +192,9 @@ public class GUI {
         gbc_scrollPane.gridx = 0;
         gbc_scrollPane.gridy = 1;
         viewPanel.add(scrollPane, gbc_scrollPane);
-        table = new JTable(data, cols);
+        table = new JTable(dataModel);
         scrollPane.setViewportView(table);
+        
         
         JPanel statsPanel = new JPanel();
         tabbedPane.addTab("Stats", null, statsPanel, null);
@@ -207,7 +208,7 @@ public class GUI {
         lblAveragePerTeam.setBounds(18, 22, 148, 16);
         panel_1.add(lblAveragePerTeam);
         
-        JLabel avgOutput = new JLabel("Output");
+        JLabel avgOutput = new JLabel("");
         avgOutput.setBounds(303, 46, 61, 16);
         panel_1.add(avgOutput);
         
@@ -239,11 +240,11 @@ public class GUI {
         lblAway.setBounds(408, 155, 61, 16);
         panel_1.add(lblAway);
         
-        JLabel homeOutput = new JLabel("hout");
+        JLabel homeOutput = new JLabel("");
         homeOutput.setBounds(303, 138, 61, 16);
         panel_1.add(homeOutput);
         
-        JLabel awayOutput = new JLabel("aout");
+        JLabel awayOutput = new JLabel("");
         awayOutput.setBounds(408, 138, 61, 16);
         panel_1.add(awayOutput);
         
@@ -279,7 +280,7 @@ public class GUI {
         comboSeason.setBounds(272, 271, 123, 27);
         panel_1.add(comboSeason);
         
-        JLabel winnerOutput = new JLabel("wout");
+        JLabel winnerOutput = new JLabel("");
         winnerOutput.setBounds(560, 275, 213, 16);
         panel_1.add(winnerOutput);
         
@@ -394,18 +395,7 @@ public class GUI {
         panel_2.add(matchId);
         matchId.setColumns(10);
         
-        JButton btnGetMatch = new JButton("get match");
-        btnGetMatch.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		String match = matchId.getText();
-        		
-        		//get match values back
-        		
-        	}
-        });
-        btnGetMatch.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-        btnGetMatch.setBounds(205, 197, 90, 29);
-        panel_2.add(btnGetMatch);
+        
         
         JLabel label = new JLabel("Country");
         label.setBounds(26, 230, 61, 16);
@@ -475,29 +465,91 @@ public class GUI {
         label_7.setBounds(26, 291, 109, 16);
         panel_2.add(label_7);
         
+        JLabel lblUpdateResult = new JLabel("");
+        lblUpdateResult.setBounds(16, 359, 691, 16);
+        panel_2.add(lblUpdateResult);
+        
+        JButton btnGetMatch = new JButton("get match");
+        btnGetMatch.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String match = matchId.getText();
+        		
+        		//get match values back
+        		String[] result = Result.getMatchInfo(match);
+        		
+        		if (result.length > 1) 
+        		{
+	        		//l.Name, c.Name, m.Season, m.MatchDate, t.TeamName, t2.TeamName, m.HomeScore, m.AwayScore
+	        		comboLeagueUp.setSelectedItem(result[0]);
+	        		comboCountryUp.setSelectedItem(result[1]);
+	        		comboHomeUp.setSelectedItem(result[4]);
+	        		comboAwayUp.setSelectedItem(result[5]);
+	        		tfSeasonUp.setText(result[2]);
+	        		tfDateUp.setText(result[3]);
+	        		tfHomeUp.setText(result[6]);
+	        		tfAwayUp.setText(result[7]);
+        		}
+        		else 
+        		{
+        			lblUpdateResult.setText(result[0]);
+        		}
+        		
+        	}
+        });
+        btnGetMatch.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        btnGetMatch.setBounds(205, 197, 90, 29);
+        panel_2.add(btnGetMatch);
+        
         JLabel lblDelet = new JLabel("Delete");
         lblDelet.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-        lblDelet.setBounds(6, 356, 109, 16);
+        lblDelet.setBounds(6, 395, 109, 16);
         panel_2.add(lblDelet);
         
         JLabel label_8 = new JLabel("Match ID");
-        label_8.setBounds(16, 390, 61, 16);
+        label_8.setBounds(16, 429, 61, 16);
         panel_2.add(label_8);
         
         matchIdDelete = new JTextField();
         matchIdDelete.setColumns(10);
-        matchIdDelete.setBounds(97, 384, 75, 28);
+        matchIdDelete.setBounds(97, 423, 75, 28);
         panel_2.add(matchIdDelete);
         
+        JLabel lblDeleteResult = new JLabel("");
+        lblDeleteResult.setBounds(16, 468, 432, 16);
+        panel_2.add(lblDeleteResult);
+        
         JButton btnDelete = new JButton("delete");
+        btnDelete.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String match = matchIdDelete.getText();
+        		String result = Result.deleteFromMatches(match);
+        		lblDeleteResult.setText(result);
+        	}
+        });
         btnDelete.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-        btnDelete.setBounds(205, 385, 90, 29);
+        btnDelete.setBounds(205, 424, 90, 29);
         panel_2.add(btnDelete);
         
         JButton btnUpdate = new JButton("update");
+        btnUpdate.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String result = Result.updateMatches(matchId.getText(), comboCountryUp.getSelectedItem().toString(), 
+        				comboLeagueUp.getSelectedItem().toString(), 
+        				tfSeasonUp.getText(), tfDateUp.getText(), comboHomeUp.getSelectedItem().toString(), 
+        				comboAwayUp.getSelectedItem().toString(), 
+        				tfHomeUp.getText(), tfAwayUp.getText());
+        		
+        		lblUpdateResult.setText(result);
+        		
+        	}
+        });
         btnUpdate.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
         btnUpdate.setBounds(643, 321, 90, 29);
         panel_2.add(btnUpdate);
+        
+        JLabel lblInsertResult = new JLabel("");
+        lblInsertResult.setBounds(431, 163, 331, 16);
+        panel_2.add(lblInsertResult);
         
         JButton btnInsert = new JButton("insert");
         btnInsert.addActionListener(new ActionListener() {
@@ -507,11 +559,14 @@ public class GUI {
         		String homeTeam = (String)comboHome.getSelectedItem();
         		String awayTeam = (String)comboHome.getSelectedItem();
         		String seasonStr = season.getText();
-        		String homeScoreStr = homeScore.getText();
-        		String awayScoreStr = awayScore.getText();
+        		String hscore = homeScore.getText();
+        		String ascore = awayScore.getText();
         		String dateStr = date.getText();
         		
         		//call insert with strings
+        		String result = Result.insertMatch(country, league, seasonStr, dateStr, homeTeam, awayTeam, hscore, ascore);
+        		
+        		lblInsertResult.setText(result);
         		
         	}
         });
@@ -527,6 +582,11 @@ public class GUI {
         });
         btnCloseConn.setBounds(6, 496, 117, 29);
         panel_2.add(btnCloseConn);
+        
+        
+        
+        
+        
         
         frame.setVisible(true);
         
