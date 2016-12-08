@@ -76,14 +76,13 @@ public class Result {
     
     public static String[] leagueSelect(int league, String season)
 	{
-		Queries query = new Queries();
 		PreparedStatement lSelect;
 		ResultSet set;
 		String[] ret = null;
 		
 		try
 		{
-			lSelect = conn.prepareStatement(query.getLeagueSelect());
+			lSelect = conn.prepareStatement(Queries.getLeagueSelect());
 			for (int i = 1; i < 9; i++)
 			{
 				lSelect.setString(i++, season);
@@ -103,6 +102,83 @@ public class Result {
 		
 		return ret;
 	}
+    
+    public static String[][] finalSelect(String league, String season)
+    {
+    	PreparedStatement fSelect;
+    	ResultSet set;
+    	String[][] ret = null;
+    	String[] stringArray = null;
+    	ArrayList<ArrayList<String>> tempArray = new ArrayList<>();
+    	ArrayList<String> tempLine;
+    	int leagueId;
+    	
+    	if ((leagueId = leagueNameToId(league)) == -1)
+    	{
+    		return null;
+    	}
+    	
+    	
+    	try
+    	{
+    		fSelect = conn.prepareStatement(Queries.getFinalSelect());
+    		
+    		fSelect.setInt(1,leagueId);
+    		fSelect.setInt(4,leagueId);
+    		fSelect.setInt(5,leagueId);
+    		fSelect.setInt(8,leagueId);
+    		fSelect.setInt(9,leagueId);
+    		fSelect.setInt(12,leagueId);
+    		fSelect.setInt(13,leagueId);
+    		fSelect.setInt(16,leagueId);
+    		fSelect.setInt(17,leagueId);
+    		fSelect.setInt(20,leagueId);
+    		fSelect.setInt(21,leagueId);
+    		fSelect.setInt(24,leagueId);
+    		fSelect.setString(2, season);
+    		fSelect.setString(3, season);
+    		fSelect.setString(6, season);
+    		fSelect.setString(7, season);
+    		fSelect.setString(10, season);
+    		fSelect.setString(11, season);
+    		fSelect.setString(14, season);
+    		fSelect.setString(15, season);
+    		fSelect.setString(18, season);
+    		fSelect.setString(19, season);
+    		fSelect.setString(22, season);
+    		fSelect.setString(23, season);
+    		
+    		set = fSelect.executeQuery();
+    		
+    		while (set.next())
+    		{
+    			tempLine = new ArrayList<>();
+    			tempLine.add(set.getString(1));
+    			tempLine.add(set.getString(2));
+    			tempLine.add(set.getString(3));
+    			tempLine.add(set.getString(4));
+    			tempLine.add(set.getString(5));
+    			tempLine.add(set.getString(6));
+    			System.out.println(tempLine);
+    			tempArray.add(tempLine);
+    		}
+    		
+    		int i = 0;
+    		ret = new String[tempArray.size()][];
+    		for (ArrayList<String> list : tempArray)
+    		{
+    			stringArray = new String[list.size()];
+    			stringArray = list.toArray(stringArray);
+    			ret[i++] = stringArray;
+    		}
+    	}
+    	catch (Exception e)
+    	{
+    		System.out.println(e);
+    	}
+    	
+    	return ret;
+    }
     
     public static int leagueNameToId(String league)
     {
@@ -232,7 +308,6 @@ public class Result {
 		return ret;
 	}
 
-    
     public static String [] getLeague(){
         String countryQuery = "SELECT Name from League;";
 		Statement s1;
@@ -394,6 +469,7 @@ public class Result {
     	
     	return  "\"" + name +"\"";
     }
+    
     public static String getShort(String teamName)
     {
     	String name = teamName.split(",")[1];

@@ -1,0 +1,119 @@
+SELECT W.TeamName, W.TeamShort, total_wins, total_losses, total_ties, (total_ties + total_wins * 3) as total_score
+FROM (
+		-- Gives Total Wins of all the teams within the given League for the given Season
+		SELECT Team.TeamName, Team.TeamShort, (H.HomeWins + A.Awaywins) as total_wins
+		FROM Team, (
+				SELECT TeamId, IFNULL(wins, 0) as HomeWins
+				FROM (
+						SELECT DISTINCT TeamId
+						FROM Matches, Team 
+						WHERE (Team.TeamId = HomeTeamId or Team.TeamId = AwayTeamId)
+						and LeagueId = ? and Season = ?
+					) as S
+						LEFT JOIN (
+							SELECT HomeTeamId, count(*) as wins 
+							FROM Matches
+							WHERE HomeScore > AwayScore and Season = ?
+							and LeagueId = ?
+							GROUP BY HomeTeamId
+						) as S2
+					ON S.TeamId = S2.HomeTeamId
+			) as H, (
+				SELECT TeamId, IFNULL(wins, 0) as Awaywins
+				FROM (
+						SELECT DISTINCT TeamId
+						FROM Matches, Team 
+						WHERE (Team.TeamId = HomeTeamId or Team.TeamId = AwayTeamId)
+						and LeagueId = ? and Season = ?
+					) as S
+						LEFT JOIN (
+							SELECT AwayTeamId, count(*) as wins 
+							FROM Matches
+							WHERE HomeScore < AwayScore and Season = ?
+							and LeagueId = ?
+							GROUP BY AwayTeamId
+						) as S2
+					ON S.TeamId = S2.AwayTeamId
+			) as A
+		WHERE H.TeamId = A.TeamId and Team.TeamId = H.TeamId
+		ORDER BY Team.TeamName
+	) as W, (
+		-- Gives Total Losses of all the teams within the given League for the given Season
+		SELECT Team.TeamName, Team.TeamShort, (H.Homelosses + A.AwayLosses) as total_losses
+		FROM Team, (
+				SELECT TeamId, IFNULL(losses, 0) as Homelosses
+				FROM (
+						SELECT DISTINCT TeamId
+						FROM Matches, Team
+						WHERE (Team.TeamId = HomeTeamId or Team.TeamId = AwayTeamId)
+						and LeagueId = ? and Season = ?
+					) as S
+						LEFT JOIN (
+							SELECT HomeTeamId, count(*) as losses
+							FROM Matches
+							WHERE HomeScore < AwayScore and Season = ?
+							and LeagueId = ?
+							GROUP BY HomeTeamId
+						) as S2
+					ON S.TeamId = S2.HomeTeamId
+			) as H, (
+				SELECT TeamId, IFNULL(losses, 0) as AwayLosses
+				FROM (
+						SELECT DISTINCT TeamId
+						FROM Matches, Team
+						WHERE (Team.TeamId = HomeTeamId or Team.TeamId = AwayTeamId)
+						and LeagueId = ? and Season = ?
+					) as S
+						LEFT JOIN (
+							SELECT AwayTeamId, count(*) as losses
+							FROM Matches
+							WHERE HomeScore > AwayScore and Season = ?
+							and LeagueId = ?
+							GROUP BY AwayTeamId
+						) as S2
+					ON S.TeamId = S2.AwayTeamId
+			) as A
+		WHERE H.TeamId = A.TeamId and Team.TeamId = H.TeamId
+		ORDER BY Team.TeamName
+	) as L, (
+		-- Gives Total Ties of all teams within the given League for the given Season
+		SELECT Team.TeamName, Team.TeamShort, (H.Hometies + A.Awayties) as total_ties
+		FROM Team, (
+				SELECT TeamId, IFNULL(ties, 0) as Hometies
+				FROM (
+						SELECT DISTINCT TeamId
+						FROM Matches, Team
+						WHERE (Team.TeamId = HomeTeamId or Team.TeamId = AwayTeamId)
+						and LeagueId = ? and Season = ?
+					) as S
+						LEFT JOIN (
+							SELECT HomeTeamId, count(*) as ties
+							FROM Matches
+							WHERE HomeScore = AwayScore and Season = ?
+							and LeagueId = ?
+							GROUP BY HomeTeamId
+						) as S2
+					ON S.TeamId = S2.HomeTeamId
+			) as H, (
+				SELECT TeamId, IFNULL(ties, 0) as Awayties
+				FROM (
+						SELECT DISTINCT TeamId
+						FROM Matches, Team
+						WHERE (Team.TeamId = HomeTeamId or Team.TeamId = AwayTeamId)
+						and LeagueId = ? and Season = ?
+					) as S
+						LEFT JOIN (
+							SELECT AwayTeamId, count(*) as ties
+							FROM Matches
+							WHERE HomeScore = AwayScore and Season = ?
+							and LeagueId = ?
+							GROUP BY AwayTeamId
+						) as S2
+					ON S.TeamId = S2.AwayTeamId
+			) as A
+		WHERE H.TeamId = A.TeamId and Team.TeamId = H.TeamId
+		ORDER BY Team.TeamName
+	) as T
+WHERE W.TeamName = L.TeamName and L.TeamName = T.TeamName
+ORDER BY total_score DESC, total_wins DESC
+;

@@ -28,6 +28,27 @@ public class Queries {
 		return leagueSelect;
 	}
 	
+	public static String getFinalSelect()
+	{
+		String finalSelect = "";
+		
+		try
+		{
+			Scanner file = new Scanner(new File("finalStandings.txt"));
+			
+			while (file.hasNext())
+			{
+				finalSelect += file.nextLine() + "\n";
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
+		
+		return finalSelect;
+	}
+	
 	public static String getSelectStar()
 	{
 		return "Select * FROM ?;";
