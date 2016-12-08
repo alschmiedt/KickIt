@@ -1,5 +1,7 @@
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ChangeEvent;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -36,8 +38,59 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
         
+ /* Columns for View data table */
+        
+        String[] cols = {
+        		"MatchID",
+        		"League",
+        		"Country",
+        		"Season",
+        		"Match Date",
+        		"Home Team",
+        		"Away Team",
+        		"Home Score",
+        		"Away Score",
+        };
+        
+        Object[][] data = Result.getMatches();
+        DefaultTableModel dataModel = new DefaultTableModel(data, cols);
+        table = new JTable(dataModel);
+        
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        
+        ChangeListener changeListener = new ChangeListener() {
+    	     public void stateChanged(ChangeEvent changeEvent) {
+    	      JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+    	int index = sourceTabbedPane.getSelectedIndex();
+    	System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+    			if (index == 0) {
+    				String[] cols = {
+    		        		"MatchID",
+    		        		"League",
+    		        		"Country",
+    		        		"Season",
+    		        		"Match Date",
+    		        		"Home Team",
+    		        		"Away Team",
+    		        		"Home Score",
+    		        		"Away Score",
+    	        		};
+
+    					//call query and get new table values
+    					String [][] newData = Result.getMatches();
+    	        		DefaultTableModel dataModel = new DefaultTableModel(newData, cols);
+    	        		table.setModel(dataModel);
+    			}
+    	     }
+        };
+        
+        tabbedPane.addChangeListener(changeListener);
+
+        
+        
+        
+        
         
         JPanel viewPanel = new JPanel();
         tabbedPane.addTab("View", null, viewPanel, null);
@@ -169,22 +222,7 @@ public class GUI {
         
         
         
-        /* Columns for View data table */
-        
-        String[] cols = {
-        		"MatchID",
-        		"League",
-        		"Country",
-        		"Season",
-        		"Match Date",
-        		"Home Team",
-        		"Away Team",
-        		"Home Score",
-        		"Away Score",
-        };
-        
-        Object[][] data = Result.getMatches();
-        DefaultTableModel dataModel = new DefaultTableModel(data, cols);
+       
         
         JScrollPane scrollPane = new JScrollPane();
         GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -192,7 +230,7 @@ public class GUI {
         gbc_scrollPane.gridx = 0;
         gbc_scrollPane.gridy = 1;
         viewPanel.add(scrollPane, gbc_scrollPane);
-        table = new JTable(dataModel);
+        
         scrollPane.setViewportView(table);
         
         
@@ -218,6 +256,8 @@ public class GUI {
         		JComboBox cb = (JComboBox)e.getSource();
         		String team = (String)cb.getSelectedItem();
         		
+        		System.out.println("here" + team);
+        		System.out.println("result " + Result.averageSelect(team));
         		//call query with team string
         		avgOutput.setText(Result.averageSelect(team));
         		//set avgOutput 
@@ -293,7 +333,7 @@ public class GUI {
         		//call query with league and season
         		String[] result = Result.leagueSelect(Result.leagueNameToId(league), season);
         		//set winnerOutput
-        		winnerOutput.setText(result[0]);
+        		winnerOutput.setText(result[1]);
         	}
         });
         btnGetInfo.setFont(new Font("Lucida Grande", Font.PLAIN, 11));

@@ -11,13 +11,16 @@ public class KickIt {
 		//System.out.println(Result.insertMatch("France", "England Premier League", "2008/2009", "2008-10-31", "Oud-Heverlee Leuven,O-H", "Oud-Heverlee Leuven, O-H", "1", "2"));
 		//System.out.println(Result.deleteFromMatches("26000"));
 
-		Result.getMatches();
+		//Result.getMatches();
+		
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
+			System.out.println("Hello World");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		if (args.length == 1 && args[0].equals("start"))
 		{

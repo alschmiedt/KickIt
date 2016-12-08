@@ -52,7 +52,6 @@ public class Result {
     	
     }
     
-   
     private static int makeIntFromResult(ResultSet result)
     {
     	int ret = -1;
@@ -74,7 +73,6 @@ public class Result {
     	
     	return ret;
     }
-    
     
     public static String[] leagueSelect(int league, String season)
 	{
@@ -187,11 +185,12 @@ public class Result {
 		try
 		{
 			lSelect = conn.prepareStatement(query.getAverageSelect());
-			lSelect.setString(1, team);
-			set = lSelect.executeQuery();
-			ret = makeStringArray(set);
-			//turn set into an array
 			
+			System.out.println("in averageSelect " + team.split(",")[0]);
+			
+			lSelect.setString(1, team.split(",")[0]);
+			set = lSelect.executeQuery();
+			ret = makeStringArray(set);			
 			
 		}
 		catch (Exception e)
@@ -199,7 +198,7 @@ public class Result {
 			System.out.println(e);
 		}
 		
-		return ret[0];
+		return ret[1];
 	}
 
     public static String[] percentageSelect(String team)
@@ -212,7 +211,7 @@ public class Result {
 		try
 		{
 			lSelect = conn.prepareStatement(query.getPercentageSelect());
-			lSelect.setString(1, team);
+			lSelect.setString(1, team.split(",")[0]);
 			set = lSelect.executeQuery();
 	        boolean f = set.next(); 
 	        
@@ -275,8 +274,6 @@ public class Result {
 		}
 	    return makeStringArray(result);    
     }
-
-
     
     public static String [] getSeason(){
         String countryQuery = "SELECT distinct Season from Matches;";
@@ -345,7 +342,7 @@ public class Result {
     
     public static String[] getMatchInfo(String matchId)
     {
-    	String matchQuery = "select l.Name, c.Name, m.Season, m.MatchDate, t.TeamName, t2.TeamName, m.HomeScore, m.AwayScore "
+    	String matchQuery = "select l.Name, c.Name, m.Season, m.MatchDate, t.TeamName, t2.TeamName, m.HomeScore, m.AwayScore, t.TeamShort, t2.TeamShort "
     			+ "From Matches m, Team t, League l, Country c, Team t2 "
     			+ "where m.CountryId = c.Id "
     			+ "and m.LeagueId = l.Id "
@@ -379,6 +376,9 @@ public class Result {
 	        for(int i = 0; i < 8; i++){
 	        	resultStr[i] = result.getString(i+1);
 	        }
+	        
+	        resultStr[4] += "," + result.getString(9);
+	        resultStr[5] += "," + result.getString(10);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
