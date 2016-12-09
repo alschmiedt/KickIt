@@ -25,6 +25,7 @@ public class GUI {
 	private static JTextField tfAwayUp;
 	private static JTextField tfHomeUp;
 	private static JTextField matchIdDelete;
+	private static JTable tableFinal;
 
 	/**
      * Create the GUI and show it.  For thread safety,
@@ -57,7 +58,7 @@ public class GUI {
         table = new JTable(dataModel);
         
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        frame.getContentPane().add(tabbedPane, BorderLayout.NORTH);
         
         ChangeListener changeListener = new ChangeListener() {
     	     public void stateChanged(ChangeEvent changeEvent) {
@@ -269,23 +270,23 @@ public class GUI {
         
         
         JLabel lblPercentageOfGames = new JLabel("Percentage of games won at home vs away");
-        lblPercentageOfGames.setBounds(18, 123, 289, 16);
+        lblPercentageOfGames.setBounds(18, 91, 289, 16);
         panel_1.add(lblPercentageOfGames);
         
         JLabel lblHome = new JLabel("Home");
-        lblHome.setBounds(303, 155, 61, 16);
+        lblHome.setBounds(303, 134, 61, 16);
         panel_1.add(lblHome);
         
         JLabel lblAway = new JLabel("Away");
-        lblAway.setBounds(408, 155, 61, 16);
+        lblAway.setBounds(408, 134, 61, 16);
         panel_1.add(lblAway);
         
         JLabel homeOutput = new JLabel("");
-        homeOutput.setBounds(303, 138, 61, 16);
+        homeOutput.setBounds(303, 119, 61, 16);
         panel_1.add(homeOutput);
         
         JLabel awayOutput = new JLabel("");
-        awayOutput.setBounds(408, 138, 61, 16);
+        awayOutput.setBounds(408, 119, 61, 16);
         panel_1.add(awayOutput);
         
         JComboBox comboPercentTeam = new JComboBox(Result.getTeam());
@@ -302,43 +303,48 @@ public class GUI {
         		awayOutput.setText(percents[1]);
         	}
         });
-        comboPercentTeam.setBounds(18, 151, 148, 27);
+        comboPercentTeam.setBounds(18, 123, 148, 27);
         panel_1.add(comboPercentTeam);
-        
-        
-        
-        JLabel lblLeagueWinner = new JLabel("League Winner For Season");
-        lblLeagueWinner.setBounds(18, 248, 235, 16);
-        panel_1.add(lblLeagueWinner);
-        
-        JComboBox comboLeagueStat = new JComboBox(Result.getLeague());
-        comboLeagueStat.setBounds(18, 271, 148, 27);
-        panel_1.add(comboLeagueStat);
-        
-        JComboBox comboSeason = new JComboBox(Result.getSeason());
-
-        comboSeason.setBounds(272, 271, 123, 27);
-        panel_1.add(comboSeason);
         
         JLabel winnerOutput = new JLabel("");
         winnerOutput.setBounds(560, 275, 213, 16);
         panel_1.add(winnerOutput);
         
-        JButton btnGetInfo = new JButton("get info");
-        btnGetInfo.addActionListener(new ActionListener() {
+        JLabel lblFinalStandings = new JLabel("Final Standings");
+        lblFinalStandings.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        lblFinalStandings.setBounds(22, 175, 199, 16);
+        panel_1.add(lblFinalStandings);
+        
+        JComboBox cbLeagueFinal = new JComboBox(Result.getLeague());
+        cbLeagueFinal.setBounds(18, 203, 168, 27);
+        panel_1.add(cbLeagueFinal);
+        
+        JComboBox cbSeasonFinal = new JComboBox(Result.getSeason());
+        cbSeasonFinal.setBounds(303, 203, 140, 27);
+        panel_1.add(cbSeasonFinal);
+        
+        String fcols [] = {"TeamName", "TeamShort", "Wins", "Losses", "Ties", "Points"};
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setBounds(21, 242, 737, 240);
+        panel_1.add(scrollPane_1);
+        String [][] fdata = {{}};
+        DefaultTableModel model = new DefaultTableModel(fdata,fcols);
+        tableFinal = new JTable(model);
+        scrollPane_1.setViewportView(tableFinal);
+        tableFinal.setBackground(Color.WHITE);
+        
+        JButton btnGetStanding = new JButton("Get Standing");
+        btnGetStanding.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		String league = (String)comboLeagueStat.getSelectedItem();
-        		String season = (String)comboSeason.getSelectedItem();
-        		
-        		//call query with league and season
-        		String[] result = Result.leagueSelect(Result.leagueNameToId(league), season);
-        		//set winnerOutput
-        		winnerOutput.setText(result[1]);
+                String[][] fdata = Result.finalSelect(cbLeagueFinal.getSelectedItem().toString(),cbSeasonFinal.getSelectedItem().toString());
+                DefaultTableModel dataModel = new DefaultTableModel(fdata, fcols);
+                tableFinal.setModel(dataModel);
+
+                
         	}
         });
-        btnGetInfo.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-        btnGetInfo.setBounds(408, 270, 85, 29);
-        panel_1.add(btnGetInfo);
+        btnGetStanding.setBounds(543, 202, 117, 29);
+        panel_1.add(btnGetStanding);
         
         JPanel modifyPanel = new JPanel();
         tabbedPane.addTab("Modify", null, modifyPanel, null);
@@ -622,6 +628,15 @@ public class GUI {
         });
         btnCloseConn.setBounds(6, 496, 117, 29);
         panel_2.add(btnCloseConn);
+        
+        JButton btnResetData = new JButton("Reset Data");
+        btnResetData.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Result.resetConnection();
+        	}
+        });
+        btnResetData.setBounds(645, 455, 117, 29);
+        panel_2.add(btnResetData);
         
         
         
