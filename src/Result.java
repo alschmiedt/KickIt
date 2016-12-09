@@ -91,8 +91,7 @@ public class Result {
 			
 			set = lSelect.executeQuery();
 			ret = makeStringArray(set);
-			for (String s : ret)
-				System.out.println(s);			
+			
 			
 		}
 		catch (Exception e)
@@ -103,6 +102,8 @@ public class Result {
 		return ret;
 	}
     
+    //Get the final standings of the season for the given league
+    //Returns a String[][] with a String[] for each team holding their name, short, wins, loses, ties, score
     public static String[][] finalSelect(String league, String season)
     {
     	PreparedStatement fSelect;
@@ -159,7 +160,6 @@ public class Result {
     			tempLine.add(set.getString(4));
     			tempLine.add(set.getString(5));
     			tempLine.add(set.getString(6));
-    			System.out.println(tempLine);
     			tempArray.add(tempLine);
     		}
     		
@@ -261,9 +261,7 @@ public class Result {
 		try
 		{
 			lSelect = conn.prepareStatement(query.getAverageSelect());
-			
-			System.out.println("in averageSelect " + team.split(",")[0]);
-			
+						
 			lSelect.setString(1, team.split(",")[0]);
 			set = lSelect.executeQuery();
 			ret = makeStringArray(set);			
@@ -626,8 +624,6 @@ public class Result {
 	    	}
 	    	
 	    	updateComplete = updateFront + setClause.substring(1) + updateBack;
-	    	System.out.println(updateComplete);
-
     	
        		update.executeUpdate(updateComplete);
     	}
@@ -696,7 +692,6 @@ public class Result {
     	
     	
     	insertComplete = insertFront + valueClause.substring(1) + insertBack;
-    	System.out.println(insertComplete);
  	
     	try
     	{
@@ -724,7 +719,6 @@ public class Result {
     		delete.setString(1, id);
     		result = delete.executeQuery();
 			check = makeIntFromResult(result);
-			System.out.println(check);
 			
 			if (isInt(id) && check != -1)
 	    		deleteStatement += id + ";";

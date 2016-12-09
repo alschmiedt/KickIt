@@ -64,7 +64,6 @@ public class GUI {
     	     public void stateChanged(ChangeEvent changeEvent) {
     	      JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
     	int index = sourceTabbedPane.getSelectedIndex();
-    	System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
     			if (index == 0) {
     				String[] cols = {
     		        		"MatchID",
@@ -257,8 +256,6 @@ public class GUI {
         		JComboBox cb = (JComboBox)e.getSource();
         		String team = (String)cb.getSelectedItem();
         		
-        		System.out.println("here" + team);
-        		System.out.println("result " + Result.averageSelect(team));
         		//call query with team string
         		avgOutput.setText(Result.averageSelect(team));
         		//set avgOutput 
