@@ -139,6 +139,9 @@ public class JDBCTestMysql1 {
        
       System.out.println("Connected");
 
+      
+      
+      
       try {
     	  ScriptRunner runner = new ScriptRunner(conn, false, true);
     	  runner.runScript(new BufferedReader(new FileReader("setup.sql")));

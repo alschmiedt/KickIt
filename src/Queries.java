@@ -10,7 +10,7 @@ public class Queries {
 
 		try
 		{
-			Scanner file = new Scanner(new File("leagueSelect.txt"));
+			Scanner file = new Scanner(new File("lib/leagueSelect.txt"));
 			String tmp = "";
 			
 			while (file.hasNext())
@@ -34,7 +34,7 @@ public class Queries {
 		
 		try
 		{
-			Scanner file = new Scanner(new File("finalStandings.txt"));
+			Scanner file = new Scanner(new File("lib/finalStandings.txt"));
 			
 			while (file.hasNext())
 			{
@@ -60,7 +60,7 @@ public class Queries {
 
 		try
 		{
-			Scanner file = new Scanner(new File("averageSelect.txt"));
+			Scanner file = new Scanner(new File("lib/averageSelect.txt"));
 			String tmp = "";
 			
 			while (file.hasNext())
@@ -83,7 +83,7 @@ public class Queries {
 		String leagueSelect = "";	
 		try
 		{
-			Scanner file = new Scanner(new File("percentageSelect.txt"));
+			Scanner file = new Scanner(new File("lib/percentageSelect.txt"));
 			String tmp = "";
 			
 			while (file.hasNext())
@@ -106,7 +106,7 @@ public class Queries {
 		String leagueSelect = "";	
 		try
 		{
-			Scanner file = new Scanner(new File("matchesSelect.txt"));
+			Scanner file = new Scanner(new File("lib/matchesSelect.txt"));
 			String tmp = "";
 			
 			while (file.hasNext())

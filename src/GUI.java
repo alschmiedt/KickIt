@@ -68,36 +68,7 @@ public class GUI {
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         frame.getContentPane().add(tabbedPane, BorderLayout.NORTH);
         
-        ChangeListener changeListener = new ChangeListener() {
-    	     public void stateChanged(ChangeEvent changeEvent) {
-    	      JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-    	int index = sourceTabbedPane.getSelectedIndex();
-    			if (index == 0) {
-    				String[] cols = {
-    		        		"MatchID",
-    		        		"League",
-    		        		"Country",
-    		        		"Season",
-    		        		"Match Date",
-    		        		"Home Team",
-    		        		"Away Team",
-    		        		"Home Score",
-    		        		"Away Score",
-    	        		};
-
-    					//call query and get new table values
-    					String [][] newData = Result.getMatches();
-    	        		DefaultTableModel dataModel = new DefaultTableModel(newData, cols);
-    	        		table.setModel(dataModel);
-    			}
-    	     }
-        };
-        
-        tabbedPane.addChangeListener(changeListener);
-
-        
-        
-        
+       
         
         
         JPanel viewPanel = new JPanel();
@@ -193,7 +164,43 @@ public class GUI {
         gbc_comboBox_3.gridy = 2;
         panel.add(comboDateSearch, gbc_comboBox_3);
         
-        
+        ChangeListener changeListener = new ChangeListener() {
+   	     public void stateChanged(ChangeEvent changeEvent) {
+   	      JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+   	      int index = sourceTabbedPane.getSelectedIndex();
+   			if (index == 0) {
+   				String[] cols = {
+   		        		"MatchID",
+   		        		"League",
+   		        		"Country",
+   		        		"Season",
+   		        		"Match Date",
+   		        		"Home Team",
+   		        		"Away Team",
+   		        		"Home Score",
+   		        		"Away Score",
+   	        		};
+
+   					//call query and get new table values
+   					String [][] newData = Result.getMatches();
+   	        		DefaultTableModel dataModel = new DefaultTableModel(newData, cols);
+   	        		table.setModel(dataModel);
+   	        		
+   	        		DefaultComboBoxModel lmodel = new DefaultComboBoxModel(Result.getLeague());
+   	        		comboLeagueSearch.setModel(lmodel); 
+   	        		
+   	        		DefaultComboBoxModel cmodel = new DefaultComboBoxModel(Result.getCountry());
+   	        		comboCountrySearch.setModel(cmodel);
+   	        		
+   	        		DefaultComboBoxModel dmodel = new DefaultComboBoxModel(Result.getDates());
+   	        		comboDateSearch.setModel(dmodel);
+   	        		
+   	        		DefaultComboBoxModel tmodel = new DefaultComboBoxModel(Result.getTeam());
+   	        		comboTeamSearch.setModel(tmodel);
+   			}
+   	     }
+       };
+       tabbedPane.addChangeListener(changeListener);
         
         JButton btnSearch = new JButton("Search");
         btnSearch.addActionListener(new ActionListener() {

@@ -45,11 +45,11 @@ public class DataBaseConnection {
 		try 
 		{
 	 	  ScriptRunner runner = new ScriptRunner(conn, false, true);
-	 	  runner.runScript(new BufferedReader(new FileReader("setup.sql")));
-	 	  runner.runScript(new BufferedReader(new FileReader("build-Country.sql")));
-	 	  runner.runScript(new BufferedReader(new FileReader("build-League.sql")));
-	 	  runner.runScript(new BufferedReader(new FileReader("build-Team.sql")));
-	 	  runner.runScript(new BufferedReader(new FileReader("build-Matches.sql")));
+	 	  runner.runScript(new BufferedReader(new FileReader("lib/setup.sql")));
+	 	  runner.runScript(new BufferedReader(new FileReader("lib/build-Country.sql")));
+	 	  runner.runScript(new BufferedReader(new FileReader("lib/build-League.sql")));
+	 	  runner.runScript(new BufferedReader(new FileReader("lib/build-Team.sql")));
+	 	  runner.runScript(new BufferedReader(new FileReader("lib/build-Matches.sql")));
 
         }  
         catch (Exception ee) {System.out.println(ee);} 
@@ -90,12 +90,12 @@ public class DataBaseConnection {
 	{
 		try {
 			ScriptRunner runner = new ScriptRunner(connection, false, true);
-			runner.runScript(new BufferedReader(new FileReader("cleanup.sql")));
-			runner.runScript(new BufferedReader(new FileReader("setup.sql")));
-			runner.runScript(new BufferedReader(new FileReader("build-Country.sql")));
-			runner.runScript(new BufferedReader(new FileReader("build-League.sql")));
-			runner.runScript(new BufferedReader(new FileReader("build-Team.sql")));
-			runner.runScript(new BufferedReader(new FileReader("build-Matches.sql")));
+			runner.runScript(new BufferedReader(new FileReader("lib/cleanup.sql")));
+			runner.runScript(new BufferedReader(new FileReader("lib/setup.sql")));
+			runner.runScript(new BufferedReader(new FileReader("lib/build-Country.sql")));
+			runner.runScript(new BufferedReader(new FileReader("lib/build-League.sql")));
+			runner.runScript(new BufferedReader(new FileReader("lib/build-Team.sql")));
+			runner.runScript(new BufferedReader(new FileReader("lib/build-Matches.sql")));
 		}
 		catch (Exception e)
 		{
